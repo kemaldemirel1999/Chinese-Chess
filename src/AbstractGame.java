@@ -2,7 +2,7 @@
 public abstract class AbstractGame {
 	
 	Board board;
-	Player white;
+	Player red;
 	Player black;
 	
 	

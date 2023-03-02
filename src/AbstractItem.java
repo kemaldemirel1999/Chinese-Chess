@@ -12,10 +12,6 @@ public abstract class AbstractItem implements ItemInterface {
 	}
 	public void setName(String name){this.name = name;}
 	public String getName(){return this.name;}
-	public AbstractItem(String position, String name){
-		this.position = position;
-		this.name = name;
-	}
 	public void move(String destination){
 		// Going to filled with move actions.
 	}

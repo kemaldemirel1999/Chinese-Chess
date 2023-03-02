@@ -26,11 +26,28 @@ public class Board extends AbstractBoard{
 		chessBoard = new String[10][9];
 		lineCode = new String[]{"j", "i", "h", "g", "f", "e", "d", "c", "b", "a"};
 	}
+	public int getLineCodeIndex(String row){
+		if(row.equals("a"))	return 9;
+		if(row.equals("b"))	return 8;
+		if(row.equals("c"))	return 7;
+		if(row.equals("d"))	return 6;
+		if(row.equals("e"))	return 5;
+		if(row.equals("f"))	return 4;
+		if(row.equals("g"))	return 3;
+		if(row.equals("h"))	return 2;
+		if(row.equals("i"))	return 1;
+		if(row.equals("j"))	return 0;
+		return -1;
+	}
 	public Item getItem(String position){
-		for(Item t: items){
-			if(position.equals(t.getPosition())){
-				return t;
+		try{
+			for(Item t: items){
+				if(position.equals(t.getPosition())){
+					return t;
+				}
 			}
+		}catch (Exception e){
+			e.printStackTrace();
 		}
 		return null;
 	}
@@ -44,7 +61,7 @@ public class Board extends AbstractBoard{
 				if(t == null){
 					System.out.print("-");
 				}
-				else{
+				else if( !t.getPosition().equals("xx")){
 					System.out.print(t);
 				}
 				if(ctr < 8){

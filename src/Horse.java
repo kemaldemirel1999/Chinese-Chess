@@ -1,14 +1,12 @@
 public class Horse extends Item{
 
 
-    public Horse(String position, String name){
-        super(position,name);
+    public Horse(String position, String name, float value){
+        super(position,name, value);
     }
     @Override
     public void move(String destination) {
-        int[] distances = calculateDistance(getPosition(), destination);
-        int lineDiff = distances[0];
-        int rowDiff = distances[1];
+        System.out.println(this.getClass());
     }
 
 }
