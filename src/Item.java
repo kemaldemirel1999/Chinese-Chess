@@ -3,11 +3,18 @@ public class Item extends AbstractItem{
 	private Player owner;
 	private float value;
 	public Board board;
+	private Game game;
 
 	public Item(String position, String name, float value){
 		setPosition(position);
 		setName(name);
 		setValue(value);
+	}
+	public void setGame(Game g){
+		this.game = g;
+	}
+	public Game getGame(){
+		return game;
 	}
 	public String toString(){
 		return getName();
@@ -49,11 +56,12 @@ public class Item extends AbstractItem{
 			getOwner().increaseScore(willBeBeatenItem.getValue());
 			willBeBeatenItem.setPosition("xx");
 			setPosition(destination);
-
+			game.changePlayerTurn();
 		}
 		// Başarılı hareket. Boş pozisyona hareket edildi.
 		else{
 			setPosition(destination);
+			game.changePlayerTurn();
 		}
 	}
 

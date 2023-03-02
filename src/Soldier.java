@@ -9,25 +9,31 @@ public class Soldier extends Item{
         setValue(1);
     }
     @Override
-    public void move(String to) {
+    public void move(String destination) {
         if(endOfTable){
             System.out.println("Hareket edilemez. Tahta sonuna ulaşıldı");
             return;
         }
+        int[] distance = calculateDistance(getPosition(), destination);
+        int rowDiff = distance[0];
+        int colDiff = distance[1];
         if(!riverCrossed){
-            moveBeforeCrossedRiver(to);
+            moveBeforeCrossedRiver(destination, rowDiff, colDiff);
             if(getRowName().compareTo("e") > 0){
                 riverCrossed = true;
             }
         }
         else{
-            moveAfterCrossedRiver(to);
+            moveAfterCrossedRiver(destination, rowDiff, colDiff);
         }
     }
-    public void moveAfterCrossedRiver(String to){
+    public void moveAfterCrossedRiver(String to, int rowDiff, int colDiff){
 
     }
-    public void moveBeforeCrossedRiver(String to){
-
+    public void moveBeforeCrossedRiver(String to, int rowDiff, int colDiff){
+        if(colDiff != 0){
+            System.out.println("Soldier. Invalid move");
+            return;
+        }
     }
 }

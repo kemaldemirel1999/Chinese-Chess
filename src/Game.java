@@ -14,6 +14,8 @@ public class Game extends AbstractGame{
             items[j].setOwner(red);
             items[i].setBoard(board);
             items[j].setBoard(board);
+            items[i].setGame(this);
+            items[j].setGame(this);
         }
     }
     public void play(String from, String to){
@@ -22,11 +24,9 @@ public class Game extends AbstractGame{
             if(item != null){
                 if(item.getOwner().equals(red) && which_players_turn == 1){
                     item.move(to);
-                    changePlayerTurn();
                 }
                 else if(item.getOwner().equals(black) && which_players_turn == 2){
                     item.move(to);
-                    changePlayerTurn();
                 }
                 else{
                     System.out.println("HATA!! Aynı oyuncu üst üste iki kez oynayamaz veya rakip taş hareket ettirilemez.");

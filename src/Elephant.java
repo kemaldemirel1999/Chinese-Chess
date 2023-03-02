@@ -5,6 +5,20 @@ public class Elephant extends Item{
     }
     @Override
     public void move(String destination) {
+        if(getGame().red.equals(getOwner())){
+            String destinationLine = destination.substring(0,1);
+            if ( destinationLine.charAt(0) > 'e' ){
+                System.out.println("Red Elephant. Nehrin karşısına geçemez");
+                return;
+            }
+        }
+        else{
+            String destinationLine = destination.substring(0,1);
+            if ( destinationLine.charAt(0) < 'f' ){
+                System.out.println("Black Elephant. Nehrin karşısına geçemez");
+                return;
+            }
+        }
         int[] distance = calculateDistance(getPosition(), destination);
         int rowDiff = distance[0];
         int colDiff = distance[1];
