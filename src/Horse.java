@@ -6,7 +6,13 @@ public class Horse extends Item{
     }
     @Override
     public void move(String destination) {
-        System.out.println(this.getClass());
+        int[] distance = calculateDistance(getPosition(), destination);
+        if(distance == null){
+            return;
+        }
+        int rowDiff = distance[0];
+        int colDiff = distance[1];
+
     }
 
 }

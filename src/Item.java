@@ -37,13 +37,18 @@ public class Item extends AbstractItem{
 		return Integer.parseInt(getPosition().substring(0,1));
 	}
 	public int[] calculateDistance(String from, String to){
-		String fromRow = from.substring(0,1).toLowerCase();
-		String toRow = to.substring(0,1).toLowerCase();
-		int fromCol = Integer.parseInt(from.substring(1,2));
-		int toCol = Integer.parseInt(to.substring(1,2));
-		int colDiff = toCol - fromCol;
-		int rowDiff = toRow.charAt(0) - fromRow.charAt(0);
-		return new int[]{rowDiff, colDiff};
+		try{
+			String fromRow = from.substring(0,1).toLowerCase();
+			String toRow = to.substring(0,1).toLowerCase();
+			int fromCol = Integer.parseInt(from.substring(1,2));
+			int toCol = Integer.parseInt(to.substring(1,2));
+			int colDiff = toCol - fromCol;
+			int rowDiff = toRow.charAt(0) - fromRow.charAt(0);
+			return new int[]{rowDiff, colDiff};
+		}catch (Exception e){
+			return null;
+		}
+
 	}
 	public void putItemToDestination(String destination){
 		Item willBeBeatenItem = getBoard().getItem(destination);
@@ -151,6 +156,25 @@ public class Item extends AbstractItem{
 						return false;
 					}
 				}
+			}
+		}
+		return true;
+	}
+	public boolean isItemInOwnPalace(String destination){
+		if(getGame().red.equals(getOwner())){
+			String destinationRow = destination.substring(0,1);
+			int destinationCol = Integer.parseInt(destination.substring(1,2));
+			if ( destinationRow.charAt(0) > 'c' ||  destinationCol < 4 || destinationCol > 6){
+				System.out.println("Red General. Dışarıya çıkamaz");
+				return false;
+			}
+		}
+		else{
+			String destinationLine = destination.substring(0,1);
+			int destinationCol = Integer.parseInt(destination.substring(1,2));
+			if ( destinationLine.charAt(0) < 'f' || destinationCol < 4 ||destinationCol > 6){
+				System.out.println("Black General. Palace dışına çıkamaz");
+				return false;
 			}
 		}
 		return true;

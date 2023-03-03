@@ -20,6 +20,9 @@ public class Elephant extends Item{
             }
         }
         int[] distance = calculateDistance(getPosition(), destination);
+        if(distance == null){
+            return;
+        }
         int rowDiff = distance[0];
         int colDiff = distance[1];
         if(rowDiff == 0 || colDiff == 0){
