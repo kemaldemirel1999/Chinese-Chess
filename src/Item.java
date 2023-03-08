@@ -23,19 +23,17 @@ public class Item extends AbstractItem{
 	public void setValue(float value) {this.value = value;}
 	public Player getOwner() {return owner;}
 	public void setOwner(Player owner) {this.owner = owner;}
-	public void increaseScore(float score){
-		owner.setPuan(owner.getPuan() + score);
-	}
-
 	public Board getBoard(){return this.board;}
 	public void setBoard(Board b){this.board = b;}
-
 	public String getRowName(){
 		return getPosition().substring(1,2);
 	}
 	public int getColumnNumber(){
 		return Integer.parseInt(getPosition().substring(0,1));
 	}
+	public String getRowName(String position){return position.substring(1,2);}
+	public int getColumnNumber(String position){return Integer.parseInt(position.substring(0,1));}
+
 	public int[] calculateDistance(String from, String to){
 		try{
 			String fromRow = from.substring(0,1).toLowerCase();
@@ -62,7 +60,7 @@ public class Item extends AbstractItem{
 		}
 		// Başarılı hareket. Rakip taş yenildi.
 		else if(willBeBeatenItem != null){
-			getOwner().increaseScore(willBeBeatenItem.getValue());
+			getOwner().setPuan(getOwner().getPuan() + willBeBeatenItem.getValue());
 			willBeBeatenItem.setPosition("xx");
 			setPosition(destination);
 			game.changePlayerTurn();
@@ -141,7 +139,7 @@ public class Item extends AbstractItem{
 	}
 
 	public boolean isDimensionSuitableToCross(int rowDiff, int colDiff){
-		return Math.abs(rowDiff) == Math.abs(colDiff);
+		return (Math.abs(rowDiff) == Math.abs(colDiff) && rowDiff != 0 && colDiff != 0);
 	}
 	public boolean isCrossClear(String destination, int rowDiff, int colDiff){
 		int fromLineIndex = getBoard().getLineCodeIndex(getPosition().substring(0,1));
@@ -205,5 +203,37 @@ public class Item extends AbstractItem{
 			}
 		}
 		return true;
+	}
+
+	public boolean isRiverCrossed(){
+		if(getRowName().compareTo("e") > 0 && getGame().red.equals(getOwner())){
+			return true;
+		}
+		else if(getRowName().compareTo("f") < 0 && getGame().black.equals(getOwner())){
+			return true;
+		}
+		return false;
+	}
+
+	public boolean isItAfterRiver(String destination){
+		if(getGame().red.equals(getOwner())){
+			return destination.substring(0, 1).charAt(0) <= 'e';
+		}
+		else if(getGame().black.equals(getOwner())){
+			return destination.substring(0, 1).charAt(0) >= 'f';
+		}
+		return true;
+	}
+
+	public boolean isDestinationEmpty(String destination){
+		try{
+			if (getBoard().getItem(destination) == null ){
+				return true;
+			}
+		}catch (OutOfBoardException e){
+			System.out.println(e.getMessage());
+			return false;
+		}
+		return  false;
 	}
 }

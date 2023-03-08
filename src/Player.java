@@ -14,20 +14,11 @@ public class Player {
 	public void setPuan(float puan) {
 		this.puan = puan;
 	}
-	public void increaseScore(float puan){
-		this.puan = this.puan + puan;
-	}
-
 	public String getPlayer_name() {
 		return this.player_name;
 	}
 	public void setPlayer_name(String player_name) {
 		this.player_name = player_name;
 	}
-
-
-
-
-
 
 }

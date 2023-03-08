@@ -5,81 +5,52 @@ public class Horse extends Item{
         super(position,name, value);
     }
 
-    // Diğer çapraz noktalar sıralanmalı
-    // bir noktaya giderken diğer çaprazı kontrol et
+    public boolean isEmptyWaypoint(String destination, int rowDiff, int colDiff){
+        String waypointPosition = null;
+        if( Math.abs(rowDiff) == 2){
+            char destinationRow = destination.substring(0,1).charAt(0);
+            if(rowDiff < 0)
+                destinationRow = (char) (destinationRow + 1);
+            else
+                destinationRow = (char) (destinationRow - 1);
+            waypointPosition =""+ destinationRow + ""+ destination.substring(1,2);
+        }
+        else if(Math.abs(colDiff) == 2){
+            int destinationCol = Integer.parseInt(destination.substring(1,2));
+            if(colDiff < 0){
+                destinationCol =  destinationCol + 1;
+            }
+            else{
+                destinationCol =  destinationCol - 1;
+            }
+            waypointPosition =""+ destination.substring(0,1) + ""+ destinationCol;
+        }
+        if(waypointPosition != null){
+            try{
+                if(getBoard().getItem(waypointPosition) == null){
+                    return true;
+                }
+            }catch (OutOfBoardException e){
+                return false;
+            }
+        }
+        return false;
+    }
     @Override
     public void move(String destination) {
         int[] distance = calculateDistance(getPosition(), destination);
-        if(distance == null){
-            return;
-        }
-        int rowDiff = distance[0];
-        int colDiff = distance[1];
-        try{
-            if( (Math.abs(rowDiff) == 1 && Math.abs(colDiff) == 2) || (Math.abs(rowDiff) == 2 && Math.abs(colDiff) == 1)){
-                if( Math.abs(rowDiff) == 2){
-                    char destinationLine = destination.substring(0,1).charAt(0);
-                    if(rowDiff < 0){
-                        destinationLine = (char) (destinationLine + 1);
-                    }
-                    else{
-                        destinationLine = (char) (destinationLine - 1);
-                    }
-                    String crossDestination =""+ destinationLine + ""+ destination.substring(1,2);
-                    if(getBoard().getItem(crossDestination) == null){
-                        putItemToDestination(destination);
-                    }// Do not Move
-                    else{
-                        int destinationCol = Integer.parseInt(destination.substring(1,2));
-                        if(colDiff < 0){
-                            destinationCol =  destinationCol + 1;
-                        }
-                        else{
-                            destinationCol =  destinationCol - 1;
-                        }
-                        crossDestination =""+ destination.substring(0,1) + ""+ destinationCol;
-                        if(getBoard().getItem(crossDestination) == null){
-                            putItemToDestination(destination);
-                        }
-                        else{
-                            System.out.println("Horse. Cannot move");
-                        }
-                    }
-                }
-                else{
-                    int destinationCol = Integer.parseInt(destination.substring(1,2));
-                    if(colDiff < 0){
-                        destinationCol =  destinationCol + 1;
-                    }
-                    else{
-                        destinationCol =  destinationCol - 1;
-                    }
-                    String crossDestination =""+ destination.substring(0,1) + ""+ destinationCol;
-                    if(getBoard().getItem(crossDestination) == null){
-                        putItemToDestination(destination);
-                    }// Do not Move
-                    else{
-                        char destinationLine = destination.substring(0,1).charAt(0);
-                        if(rowDiff < 0){
-                            destinationLine = (char) (destinationLine + 1);
-                        }
-                        else{
-                            destinationLine = (char) (destinationLine - 1);
-                        }
-                        crossDestination = ""+ destinationLine + ""+ destination.substring(1,2);
-                        if(getBoard().getItem(crossDestination) == null){
-                            putItemToDestination(destination);
-                        }
-                        else{
-                            System.out.println("Horse. Cannot move");
-                        }
-                    }
+        if(distance != null){
+            int rowDiff = distance[0];
+            int colDiff = distance[1];
+            if(isDimensionsSuitableToHorseMove(rowDiff, colDiff) ){
+                if(isEmptyWaypoint(destination, rowDiff, colDiff)){
+                    putItemToDestination(destination);
                 }
             }
-        }catch (OutOfBoardException e){
-            System.out.println(e.getMessage());
         }
-
+    }
+    public boolean isDimensionsSuitableToHorseMove(int rowDiff, int colDiff){
+        return ((Math.abs(rowDiff) == 1 && Math.abs(colDiff) == 2) || (Math.abs(rowDiff) == 2 && Math.abs(colDiff) == 1));
     }
 
 }

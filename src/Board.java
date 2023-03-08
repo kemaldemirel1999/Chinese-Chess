@@ -38,7 +38,7 @@ public class Board extends AbstractBoard{
 	public Item getItem(String position) throws OutOfBoardException{
 		char row = position.substring(0,1).toLowerCase().charAt(0);
 		int col = Integer.parseInt(position.substring(1,2));
-		if(row < 'a' || row > 'z' || col < 0 || col > 9){
+		if(row < 'a' || row > 'z' || col < 1 || col > 9){
 			throw new OutOfBoardException("Index disine cikildi(getItem)");
 		}
 		for(Item t: items){
