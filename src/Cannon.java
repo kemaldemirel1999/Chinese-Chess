@@ -3,9 +3,7 @@ public class Cannon extends Item{
     public Cannon(String position, String name, float value){
         super(position,name, value);
     }
-    public boolean isDimensionSuitableToCannon(int rowDiff, int colDiff){
-        return (rowDiff == 0 && colDiff != 0) || (rowDiff != 0 && colDiff == 0);
-    }
+
     @Override
     public void move(String destination) {
         int[] distance = calculateDistance(getPosition(), destination);
@@ -87,6 +85,8 @@ public class Cannon extends Item{
         return counter == 1;
     }
 
-
+    public boolean isDimensionSuitableToCannon(int rowDiff, int colDiff){
+        return (rowDiff == 0 && colDiff != 0) || (rowDiff != 0 && colDiff == 0);
+    }
 
 }

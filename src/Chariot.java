@@ -21,7 +21,6 @@ public class Chariot extends Item{
                     }
                 }
             }
-
         }
     }
 

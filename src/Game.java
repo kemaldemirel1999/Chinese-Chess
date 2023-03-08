@@ -18,22 +18,6 @@ public class Game extends AbstractGame{
             items[j].setGame(this);
         }
     }
-    public int getWhich_players_turn() {
-        return which_players_turn;
-    }
-    public void setWhich_players_turn(int which_players_turn) {
-        this.which_players_turn = which_players_turn;
-    }
-    public Board getBoard(){
-        return board;
-    }
-    public void changePlayerTurn(){
-        if(which_players_turn == 1)
-            which_players_turn = 2;
-        else
-            which_players_turn = 1;
-    }
-
     public void play(String from, String to){
         try{
             Item item = board.getItem(from);
@@ -48,17 +32,27 @@ public class Game extends AbstractGame{
                     System.out.println("HATA!! Aynı oyuncu üst üste iki kez oynayamaz veya rakip taş hareket ettirilemez.");
                 }
             }
-            else{
-                System.out.println("Seçilen konumda taş yok. Item is null");
-            }
         }catch (Exception e){
-            e.printStackTrace();
+            System.out.println(e);
         }
     }
 
+    public int getWhich_players_turn() {
+        return which_players_turn;
+    }
+    public void setWhich_players_turn(int which_players_turn) {
+        this.which_players_turn = which_players_turn;
+    }
 
-
-
+    public Board getBoard(){
+        return board;
+    }
+    public void changePlayerTurn(){
+        if(which_players_turn == 1)
+            which_players_turn = 2;
+        else
+            which_players_turn = 1;
+    }
 
 
     public void save_binary(String address){
