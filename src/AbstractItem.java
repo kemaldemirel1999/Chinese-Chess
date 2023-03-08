@@ -15,8 +15,4 @@ public abstract class AbstractItem implements ItemInterface {
 	public void move(String destination){
 		// Going to filled with move actions.
 	}
-
-
-	
-	
 }

@@ -46,32 +46,30 @@ public class Cannon extends Item{
         }
     }
     public boolean isRowCannonRuleSatisfy(String destination, int rowDiff){
-        String[][] chessBoard = getBoard().getChessBoard();
-        String currentPosition = getPosition();
         int fromLineIndex = getBoard().getLineCodeIndex(getPosition().substring(0,1));
         int toLineIndex = getBoard().getLineCodeIndex(destination.substring(0,1));
         int fromColumnIndex = Integer.parseInt(getPosition().substring(1,2));
         int counter = 0;
-        if(rowDiff < 0){
-            for(int row=fromLineIndex+1; row<toLineIndex; row++){
-                if(getBoard().getItem(""+getBoard().getLineCode()[row]+""+fromColumnIndex) != null){
-                    counter ++;
+        try{
+            if(rowDiff < 0){
+                for(int row=fromLineIndex+1; row<toLineIndex; row++){
+                    if(getBoard().getItem(""+getBoard().getLineCode()[row]+""+fromColumnIndex) != null){
+                        counter ++;
+                    }
                 }
             }
-        }
-        else if(rowDiff > 0){
-            for(int row=fromLineIndex-1; row>toLineIndex; row--){
-                if(getBoard().getItem(""+getBoard().getLineCode()[row]+""+fromColumnIndex) != null){
-                    counter ++;
+            else if(rowDiff > 0){
+                for(int row=fromLineIndex-1; row>toLineIndex; row--){
+                    if(getBoard().getItem(""+getBoard().getLineCode()[row]+""+fromColumnIndex) != null){
+                        counter ++;
+                    }
                 }
             }
-        }
-        if(counter == 1){
-            return true;
-        }
-        else{
+        }catch (OutOfBoardException e){
+            System.out.println(e.getMessage());
             return false;
         }
+        return counter == 1;
     }
 
     public boolean isColumnCannonRuleSatisfy(String destination, int colDiff){
@@ -82,31 +80,36 @@ public class Cannon extends Item{
         int fromColumnIndex = Integer.parseInt(getPosition().substring(1,2));
         int toColumnIndex = Integer.parseInt(destination.substring(1,2));
         int counter = 0;
-        if(colDiff > 0){
-            for(int col=fromColumnIndex+1; col<toColumnIndex-1; col++){
-                if(getBoard().getItem(""+getBoard().getLineCode()[fromLineIndex]+""+col) != null){
-                    counter ++;
+        try{
+            if(colDiff > 0){
+                for(int col=fromColumnIndex+1; col<toColumnIndex-1; col++){
+                    if(getBoard().getItem(""+getBoard().getLineCode()[fromLineIndex]+""+col) != null){
+                        counter ++;
+                    }
                 }
             }
-        }
-        else if(colDiff < 0){
-            for(int col=fromColumnIndex-1; col>toColumnIndex-1; col--){
-                if(getBoard().getItem(""+getBoard().getLineCode()[fromLineIndex]+""+col) != null){
-                    counter ++;
+            else if(colDiff < 0){
+                for(int col=fromColumnIndex-1; col>toColumnIndex-1; col--){
+                    if(getBoard().getItem(""+getBoard().getLineCode()[fromLineIndex]+""+col) != null){
+                        counter ++;
+                    }
                 }
             }
-        }
-        if(counter == 1){
-            return true;
-        }
-        else{
+        }catch (OutOfBoardException e){
+            System.out.println(e.getMessage());
             return false;
         }
+        return counter == 1;
     }
 
     public boolean isDestinationEmpty(String destination){
-        if (getBoard().getItem(destination) == null ){
-            return true;
+        try{
+            if (getBoard().getItem(destination) == null ){
+                return true;
+            }
+        }catch (OutOfBoardException e){
+            System.out.println(e.getMessage());
+            return false;
         }
         return  false;
     }

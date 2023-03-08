@@ -48,11 +48,15 @@ public class Item extends AbstractItem{
 		}catch (Exception e){
 			return null;
 		}
-
 	}
 	public void putItemToDestination(String destination){
-		Item willBeBeatenItem = getBoard().getItem(destination);
-
+		Item willBeBeatenItem;
+		try{
+			willBeBeatenItem = getBoard().getItem(destination);
+		}catch (OutOfBoardException e){
+			System.out.println(e.getMessage());
+			return;
+		}
 		if(willBeBeatenItem!= null && willBeBeatenItem.getOwner().equals(getOwner())){
 			System.out.println("Chariot. Kendi taşının üstüne hareket edemez.");
 		}
@@ -71,23 +75,32 @@ public class Item extends AbstractItem{
 	}
 
 	public boolean isColumnClear(String destination, int colDiff){
-		String[][] chessBoard = getBoard().getChessBoard();
-		String currentPosition = getPosition();
 		int fromLineIndex = getBoard().getLineCodeIndex(getPosition().substring(0,1));
-		int toLineIndex = getBoard().getLineCodeIndex(destination.substring(0,1));
 		int fromColumnIndex = Integer.parseInt(getPosition().substring(1,2));
 		int toColumnIndex = Integer.parseInt(destination.substring(1,2));
 		if(colDiff > 0){
 			for(int col=fromColumnIndex+1; col<toColumnIndex-1; col++){
-				if(getBoard().getItem(""+getBoard().getLineCode()[fromLineIndex]+""+col) != null){
-					return false;
+				Item tmp = null;
+				try{
+					 tmp = getBoard().getItem(""+getBoard().getLineCode()[fromLineIndex]+""+col);
+					if(tmp != null){
+						return false;
+					}
+				}catch (OutOfBoardException e){
+					System.out.println(e.getMessage());
 				}
 			}
 		}
 		else if(colDiff < 0){
 			for(int col=fromColumnIndex-1; col>toColumnIndex-1; col--){
-				if(getBoard().getItem(""+getBoard().getLineCode()[fromLineIndex]+""+col) != null){
-					return false;
+				Item tmp = null;
+				try{
+					tmp = getBoard().getItem(""+getBoard().getLineCode()[fromLineIndex]+""+col);
+					if( tmp != null){
+						return false;
+					}
+				}catch (OutOfBoardException e){
+					System.out.println(e.getMessage());
 				}
 			}
 		}
@@ -95,71 +108,85 @@ public class Item extends AbstractItem{
 	}
 
 	public boolean isRowClear(String destination, int rowDiff){
-		String[][] chessBoard = getBoard().getChessBoard();
-		String currentPosition = getPosition();
 		int fromLineIndex = getBoard().getLineCodeIndex(getPosition().substring(0,1));
 		int toLineIndex = getBoard().getLineCodeIndex(destination.substring(0,1));
 		int fromColumnIndex = Integer.parseInt(getPosition().substring(1,2));
 		if(rowDiff < 0){
 			for(int row=fromLineIndex+1; row<toLineIndex; row++){
-				if(getBoard().getItem(""+getBoard().getLineCode()[row]+""+fromColumnIndex) != null){
-					return false;
+				Item tmp = null;
+				try{
+					tmp = getBoard().getItem(""+getBoard().getLineCode()[row]+""+fromColumnIndex);
+					if( tmp != null){
+						return false;
+					}
+				}catch (OutOfBoardException e){
+					System.out.println(e.getMessage());
 				}
 			}
 		}
 		else if(rowDiff > 0){
 			for(int row=fromLineIndex-1; row>toLineIndex; row--){
-				if(getBoard().getItem(""+getBoard().getLineCode()[row]+""+fromColumnIndex) != null){
-					return false;
+				Item tmp = null;
+				try{
+					tmp = getBoard().getItem(""+getBoard().getLineCode()[row]+""+fromColumnIndex);
+					if(tmp != null){
+						return false;
+					}
+				}catch (OutOfBoardException e){
+					System.out.println(e.getMessage());
 				}
 			}
 		}
 		return true;
 	}
+
 	public boolean isDimensionSuitableToCross(int rowDiff, int colDiff){
-		if ( Math.abs(rowDiff) == Math.abs(colDiff)){
-			return true;
-		}
-		return false;
+		return Math.abs(rowDiff) == Math.abs(colDiff);
 	}
 	public boolean isCrossClear(String destination, int rowDiff, int colDiff){
 		int fromLineIndex = getBoard().getLineCodeIndex(getPosition().substring(0,1));
 		int toLineIndex = getBoard().getLineCodeIndex(destination.substring(0,1));
 		int fromColumnIndex = Integer.parseInt(getPosition().substring(1,2));
 		int toColumnIndex = Integer.parseInt(destination.substring(1,2));
-		if(rowDiff < 0){
-			if(colDiff < 0){
-				for(int row=fromLineIndex+1, col=fromColumnIndex-1; row<toLineIndex && col>toColumnIndex-1 ; row++, col--){
-					if(getBoard().getItem(""+getBoard().getLineCode()[row]+""+col) != null){
-						return false;
+		try{
+			if(rowDiff < 0){
+				if(colDiff < 0){
+					for(int row=fromLineIndex+1, col=fromColumnIndex-1; row<toLineIndex && col>toColumnIndex-1 ; row++, col--){
+						if(getBoard().getItem(""+getBoard().getLineCode()[row]+""+col) != null){
+							return false;
+						}
+					}
+				}
+				else{
+					for(int row=fromLineIndex+1, col=fromColumnIndex+1; row<toLineIndex && col<toColumnIndex-1 ; row++, col++){
+						if(getBoard().getItem(""+getBoard().getLineCode()[row]+""+col) != null){
+							return false;
+						}
+					}
+				}
+			}else{
+				if(colDiff < 0){
+					for(int row=fromLineIndex-1, col=fromColumnIndex-1; row>toLineIndex && col>toColumnIndex-1; row--, col--){
+						if(getBoard().getItem(""+getBoard().getLineCode()[row]+""+col) != null){
+							return false;
+						}
+					}
+				}
+				else{
+					for(int row=fromLineIndex-1, col=fromColumnIndex+1; row>toLineIndex && col<toColumnIndex-1; row--,col++){
+						if(getBoard().getItem(""+getBoard().getLineCode()[row]+""+col) != null){
+							return false;
+						}
 					}
 				}
 			}
-			else{
-				for(int row=fromLineIndex+1, col=fromColumnIndex+1; row<toLineIndex && col<toColumnIndex-1 ; row++, col++){
-					if(getBoard().getItem(""+getBoard().getLineCode()[row]+""+col) != null){
-						return false;
-					}
-				}
-			}
-		}else{
-			if(colDiff < 0){
-				for(int row=fromLineIndex-1, col=fromColumnIndex-1; row>toLineIndex && col>toColumnIndex-1; row--, col--){
-					if(getBoard().getItem(""+getBoard().getLineCode()[row]+""+col) != null){
-						return false;
-					}
-				}
-			}
-			else{
-				for(int row=fromLineIndex-1, col=fromColumnIndex+1; row>toLineIndex && col<toColumnIndex-1; row--,col++){
-					if(getBoard().getItem(""+getBoard().getLineCode()[row]+""+col) != null){
-						return false;
-					}
-				}
-			}
+		}catch (OutOfBoardException e){
+			System.out.println(e.getMessage());
+			return false;
 		}
 		return true;
 	}
+
 	public boolean isItemInOwnPalace(String destination){
 		if(getGame().red.equals(getOwner())){
 			String destinationRow = destination.substring(0,1);

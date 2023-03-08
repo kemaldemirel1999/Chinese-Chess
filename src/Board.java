@@ -14,14 +14,10 @@ public class Board extends AbstractBoard{
 	public void setChessBoard(String[][] chessBoard) {
 		this.chessBoard = chessBoard;
 	}
-	public String[] getLineCode() {
-		return lineCode;
-	}
+	public String[] getLineCode() {return lineCode;}
 	public void setLineCode(String[] lineCode) {
 		this.lineCode = lineCode;
 	}
-
-
 	public void createChessBoard(){
 		chessBoard = new String[10][9];
 		lineCode = new String[]{"j", "i", "h", "g", "f", "e", "d", "c", "b", "a"};
@@ -39,15 +35,16 @@ public class Board extends AbstractBoard{
 		if(row.equals("j"))	return 0;
 		return -1;
 	}
-	public Item getItem(String position){
-		try{
-			for(Item t: items){
-				if(position.equals(t.getPosition())){
-					return t;
-				}
+	public Item getItem(String position) throws OutOfBoardException{
+		char row = position.substring(0,1).toLowerCase().charAt(0);
+		int col = Integer.parseInt(position.substring(1,2));
+		if(row < 'a' || row > 'z' || col < 0 || col > 9){
+			throw new OutOfBoardException("Index disine cikildi(getItem)");
+		}
+		for(Item t: items){
+			if(position.equals(t.getPosition())){
+				return t;
 			}
-		}catch (Exception e){
-			e.printStackTrace();
 		}
 		return null;
 	}
@@ -57,7 +54,12 @@ public class Board extends AbstractBoard{
 			int ctr = 0;
 			for(int col=0; col<chessBoard[row].length; col++){
 				String position = getLineCode()[row] + "" + (col+1);
-				Item t = getItem(position);
+				Item t = null;
+				try{
+					t = getItem(position);
+				}catch (OutOfBoardException e){
+					e.printStackTrace();
+				}
 				if(t == null){
 					System.out.print("-");
 				}
@@ -78,7 +80,5 @@ public class Board extends AbstractBoard{
 			if(row == 8) 	System.out.println(" \t|  |  |  |\\ | /|  |  |  |");
 		}
 		System.out.println(" \t1--2--3--4--5--6--7--8--9");
-		
 	}
-
 }
