@@ -5,6 +5,19 @@ public class Horse extends Item{
         super(position,name, value);
     }
 
+    @Override
+    public boolean isItSuitableMove(String destination, int rowDiff, int colDiff) throws OutOfBoardException, PieceMovementException {
+        char row = destination.substring(0,1).toLowerCase().charAt(0);
+        int col = Integer.parseInt(destination.substring(1,2));
+        if(row < 'a' || row > 'j' || col < 1 || col > 9){
+            throw new OutOfBoardException("Horse. Hatali Hareket.");
+        }
+        if(!((Math.abs(rowDiff) == 1 && Math.abs(colDiff) == 2) || (Math.abs(rowDiff) == 2 && Math.abs(colDiff) == 1))){
+            throw new PieceMovementException("Horse. Hatali Hareket.");
+        }
+        return true;
+    }
+
     public boolean isEmptyWaypoint(String destination, int rowDiff, int colDiff){
         String waypointPosition = null;
         if( Math.abs(rowDiff) == 2){
@@ -42,15 +55,15 @@ public class Horse extends Item{
         if(distance != null){
             int rowDiff = distance[0];
             int colDiff = distance[1];
-            if(isDimensionsSuitableToHorseMove(rowDiff, colDiff) ){
-                if(isEmptyWaypoint(destination, rowDiff, colDiff)){
-                    putItemToDestination(destination);
+            try {
+                if(isItSuitableMove(destination, rowDiff, colDiff) ){
+                    if(isEmptyWaypoint(destination, rowDiff, colDiff)){
+                        putItemToDestination(destination);
+                    }
                 }
+            } catch (OutOfBoardException | PieceMovementException e) {
+                e.printStackTrace();
             }
         }
     }
-    public boolean isDimensionsSuitableToHorseMove(int rowDiff, int colDiff){
-        return ((Math.abs(rowDiff) == 1 && Math.abs(colDiff) == 2) || (Math.abs(rowDiff) == 2 && Math.abs(colDiff) == 1));
-    }
-
 }

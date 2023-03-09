@@ -19,6 +19,7 @@ public class Game extends AbstractGame{
         }
     }
     public void play(String from, String to){
+        int previousPlayerNumber = which_players_turn;
         try{
             Item item = board.getItem(from);
             if(item != null){
@@ -29,11 +30,14 @@ public class Game extends AbstractGame{
                     item.move(to);
                 }
                 else{
-                    System.out.println("HATA!! Aynı oyuncu üst üste iki kez oynayamaz veya rakip taş hareket ettirilemez.");
+                    System.out.println("Aynı oyuncu üst üste iki kez oynayamaz veya rakip taş hareket ettirilemez.");
                 }
             }
-        }catch (Exception e){
+        }catch (OutOfBoardException e){
             System.out.println(e);
+        }
+        if(previousPlayerNumber == which_players_turn){
+            System.out.println("Hatali hareket");
         }
     }
 

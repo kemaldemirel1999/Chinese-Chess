@@ -9,23 +9,37 @@ public class Chariot extends Item{
         if(distance != null){
             int rowDiff = distance[0];
             int colDiff = distance[1];
-            if(isDimesionSuitableToChariotMove(rowDiff, colDiff)){
-                if(rowDiff != 0){
-                    if (isRowClear(destination, rowDiff)){
-                        putItemToDestination(destination);
+            try{
+                if(isItSuitableMove(destination, rowDiff, colDiff)){
+                    if(rowDiff != 0){
+                        if (isRowClear(destination, rowDiff)){
+                            putItemToDestination(destination);
+                        }
+                    }
+                    else{
+                        if (isColumnClear(destination, colDiff)){
+                            putItemToDestination(destination);
+                        }
                     }
                 }
-                else{
-                    if (isColumnClear(destination, colDiff)){
-                        putItemToDestination(destination);
-                    }
-                }
+            }catch (PieceMovementException | OutOfBoardException e){
+                System.out.println(e);
             }
         }
     }
 
-    public boolean isDimesionSuitableToChariotMove(int rowDiff, int colDiff){
-        return (rowDiff == 0 && colDiff != 0) || (rowDiff != 0 && colDiff == 0);
+
+    @Override
+    public boolean isItSuitableMove(String destination, int rowDiff, int colDiff) throws OutOfBoardException, PieceMovementException{
+        char row = destination.substring(0,1).toLowerCase().charAt(0);
+        int col = Integer.parseInt(destination.substring(1,2));
+        if(row < 'a' || row > 'j' || col < 1 || col > 9){
+            throw new OutOfBoardException("Chariot. Hatali Hareket.");
+        }
+        if(! ( (rowDiff == 0 && colDiff != 0) || (rowDiff != 0 && colDiff == 0) )  ) {
+            throw new PieceMovementException("Chariot. Hatali Hareket.");
+        }
+        return true;
     }
 
 

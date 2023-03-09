@@ -15,4 +15,7 @@ public abstract class AbstractItem implements ItemInterface {
 	public void move(String destination){
 		// Going to filled with move actions.
 	}
+
+	// Hareketin doğru olup olmadığını kontrol eder.
+	abstract boolean isItSuitableMove(String destination, int rowDiff, int colDiff) throws OutOfBoardException, PieceMovementException;
 }

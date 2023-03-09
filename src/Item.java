@@ -1,5 +1,5 @@
 
-public class Item extends AbstractItem{
+public abstract class Item extends AbstractItem{
 	private Player owner;
 	private float value;
 	public Board board;
@@ -33,6 +33,10 @@ public class Item extends AbstractItem{
 	}
 	public String getRowName(String position){return position.substring(1,2);}
 	public int getColumnNumber(String position){return Integer.parseInt(position.substring(0,1));}
+
+
+	public abstract boolean isItSuitableMove(String destination, int rowDiff, int colDiff) throws OutOfBoardException, PieceMovementException;
+
 
 	public int[] calculateDistance(String from, String to){
 		try{
@@ -78,7 +82,7 @@ public class Item extends AbstractItem{
 		int toColumnIndex = Integer.parseInt(destination.substring(1,2));
 		if(colDiff > 0){
 			for(int col=fromColumnIndex+1; col<toColumnIndex-1; col++){
-				Item tmp = null;
+				Item tmp;
 				try{
 					 tmp = getBoard().getItem(""+getBoard().getLineCode()[fromLineIndex]+""+col);
 					if(tmp != null){
@@ -91,7 +95,7 @@ public class Item extends AbstractItem{
 		}
 		else if(colDiff < 0){
 			for(int col=fromColumnIndex-1; col>toColumnIndex-1; col--){
-				Item tmp = null;
+				Item tmp;
 				try{
 					tmp = getBoard().getItem(""+getBoard().getLineCode()[fromLineIndex]+""+col);
 					if( tmp != null){
@@ -138,9 +142,7 @@ public class Item extends AbstractItem{
 		return true;
 	}
 
-	public boolean isDimensionSuitableToCross(int rowDiff, int colDiff){
-		return (Math.abs(rowDiff) == Math.abs(colDiff) && rowDiff != 0 && colDiff != 0);
-	}
+
 	public boolean isCrossClear(String destination, int rowDiff, int colDiff){
 		int fromLineIndex = getBoard().getLineCodeIndex(getPosition().substring(0,1));
 		int toLineIndex = getBoard().getLineCodeIndex(destination.substring(0,1));
@@ -190,7 +192,6 @@ public class Item extends AbstractItem{
 			String destinationRow = destination.substring(0,1);
 			int destinationCol = Integer.parseInt(destination.substring(1,2));
 			if ( destinationRow.charAt(0) > 'c' ||  destinationCol < 4 || destinationCol > 6){
-				System.out.println("Red General. Dışarıya çıkamaz");
 				return false;
 			}
 		}
@@ -198,7 +199,6 @@ public class Item extends AbstractItem{
 			String destinationLine = destination.substring(0,1);
 			int destinationCol = Integer.parseInt(destination.substring(1,2));
 			if ( destinationLine.charAt(0) < 'f' || destinationCol < 4 ||destinationCol > 6){
-				System.out.println("Black General. Palace dışına çıkamaz");
 				return false;
 			}
 		}
@@ -236,4 +236,6 @@ public class Item extends AbstractItem{
 		}
 		return  false;
 	}
+
+
 }

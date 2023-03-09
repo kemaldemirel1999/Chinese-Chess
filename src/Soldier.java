@@ -8,6 +8,44 @@ public class Soldier extends Item{
     }
 
     @Override
+    public boolean isItSuitableMove(String destination, int rowDiff, int colDiff) throws OutOfBoardException, PieceMovementException {
+        char row = destination.substring(0,1).toLowerCase().charAt(0);
+        int col = Integer.parseInt(destination.substring(1,2));
+        if(row < 'a' || row > 'j' || col < 1 || col > 9){
+            throw new OutOfBoardException("Soldier. Hatali Hareket.");
+        }
+        String rowName = getRowName().toLowerCase();
+        if( getGame().red.equals(getOwner())){
+            if(rowName.equals("j")){
+                throw new PieceMovementException("Soldier. Hatali Hareket.");
+            }
+        }
+        else if( getGame().black.equals(getOwner())){
+            if(rowName.equals("a")){
+                throw new PieceMovementException("Soldier. Hatali Hareket.");
+            }
+        }
+        if(!riverCrossed){
+            if(!(colDiff == 0 && (getGame().red.equals(getOwner()) && rowDiff == 1)  || (getGame().black.equals(getOwner()) && rowDiff == -1) )){
+                throw new PieceMovementException("Soldier. Hatali Hareket.");
+            }
+        }
+        else{
+            if( getGame().red.equals(getOwner()) ){
+                if(! ((rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1) || (rowDiff == 0 && colDiff == -1)) ){
+                    throw new PieceMovementException("Soldier. Hatali Hareket.");
+                }
+            }
+            else if( getGame().black.equals(getOwner()) ){
+                if(! ((rowDiff == -1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1) || (rowDiff == 0 && colDiff == -1)) ){
+                    throw new PieceMovementException("Soldier. Hatali Hareket.");
+                }
+            }
+        }
+        return true;
+    }
+
+    @Override
     public void move(String destination) {
         if(endOfTable){
             System.out.println("Soldier hareket edemez.Tahta sonuna ulaşıldı");
@@ -17,40 +55,16 @@ public class Soldier extends Item{
         if(distance != null){
             int rowDiff = distance[0];
             int colDiff = distance[1];
-            // Nehir öncesi durum.
-            if(!riverCrossed){
-                moveBeforeCrossedRiver(destination, rowDiff, colDiff);
-                riverCrossed = isRiverCrossed();
+            try {
+                if(isItSuitableMove(destination, rowDiff, colDiff)){
+                    putItemToDestination(destination);
+                    if(!riverCrossed){
+                        riverCrossed = isRiverCrossed();
+                    }
+                }
+            } catch (OutOfBoardException | PieceMovementException e) {
+                e.printStackTrace();
             }
-            // Nehir geçildiği durum.
-            else{
-                moveAfterCrossedRiver(destination, rowDiff, colDiff);
-            }
-        }
-    }
-    public void moveAfterCrossedRiver(String to, int rowDiff, int colDiff){
-        // Red taş ise
-        if( getGame().red.equals(getOwner()) ){
-            if( (rowDiff == 1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1) || (rowDiff == 0 && colDiff == -1) ){
-                putItemToDestination(to);
-            }
-        }
-        // Black taş ise
-        else if( getGame().black.equals(getOwner()) ){
-            if( (rowDiff == -1 && colDiff == 0) || (rowDiff == 0 && colDiff == 1) || (rowDiff == 0 && colDiff == -1) ){
-                putItemToDestination(to);
-            }
-        }
-        else{
-            System.out.println("Soldier. Nehir sonrasında gecersiz hareket.");
-        }
-    }
-    public void moveBeforeCrossedRiver(String to, int rowDiff, int colDiff){
-        if(colDiff == 0 && (getGame().red.equals(getOwner()) && rowDiff == 1)  || (getGame().black.equals(getOwner()) && rowDiff == -1) ){
-            putItemToDestination(to);
-        }
-        else{
-            System.out.println("Soldier. Nehir öncesi gecersiz hareket.");
         }
     }
 }

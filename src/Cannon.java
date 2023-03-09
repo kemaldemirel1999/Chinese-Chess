@@ -5,28 +5,45 @@ public class Cannon extends Item{
     }
 
     @Override
+    public boolean isItSuitableMove(String destination, int rowDiff, int colDiff) throws OutOfBoardException, PieceMovementException {
+        char row = destination.substring(0,1).toLowerCase().charAt(0);
+        int col = Integer.parseInt(destination.substring(1,2));
+        if(row < 'a' || row > 'j' || col < 1 || col > 9){
+            throw new OutOfBoardException("Cannon. Hatali Hareket.");
+        }
+        if(!((rowDiff == 0 && colDiff != 0) || (rowDiff != 0 && colDiff == 0))){
+            throw new PieceMovementException("Cannon. Hatali hareket.");
+        }
+        return true;
+    }
+
+    @Override
     public void move(String destination) {
         int[] distance = calculateDistance(getPosition(), destination);
         if(distance != null){
             int rowDiff = distance[0];
             int colDiff = distance[1];
-            if(isDimensionSuitableToCannon(rowDiff, colDiff)){
-                if(isDestinationEmpty(destination)){
-                    if(rowDiff != 0 && isRowClear(destination, rowDiff)){
-                        putItemToDestination(destination);
+            try {
+                if(isItSuitableMove(destination ,rowDiff, colDiff)){
+                    if(isDestinationEmpty(destination)){
+                        if(rowDiff != 0 && isRowClear(destination, rowDiff)){
+                            putItemToDestination(destination);
+                        }
+                        else if(colDiff != 0 && isColumnClear(destination, colDiff) ){
+                            putItemToDestination(destination);
+                        }
                     }
-                    else if(colDiff != 0 && isColumnClear(destination, colDiff) ){
-                        putItemToDestination(destination);
+                    else{
+                        if(rowDiff != 0 && isRowCannonRuleSatisfy(destination, rowDiff)){
+                            putItemToDestination(destination);
+                        }
+                        else if(colDiff != 0 && isColumnCannonRuleSatisfy(destination, rowDiff)){
+                            putItemToDestination(destination);
+                        }
                     }
                 }
-                else{
-                    if(rowDiff != 0 && isRowCannonRuleSatisfy(destination, rowDiff)){
-                        putItemToDestination(destination);
-                    }
-                    else if(colDiff != 0 && isColumnCannonRuleSatisfy(destination, rowDiff)){
-                        putItemToDestination(destination);
-                    }
-                }
+            } catch (OutOfBoardException | PieceMovementException e) {
+                System.out.println(e);
             }
         }
 
@@ -84,9 +101,4 @@ public class Cannon extends Item{
         }
         return counter == 1;
     }
-
-    public boolean isDimensionSuitableToCannon(int rowDiff, int colDiff){
-        return (rowDiff == 0 && colDiff != 0) || (rowDiff != 0 && colDiff == 0);
-    }
-
 }
