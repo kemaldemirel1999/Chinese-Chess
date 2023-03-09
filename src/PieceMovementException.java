@@ -9,7 +9,7 @@ public class PieceMovementException extends Exception{
         this.message = message;
     }
     public String toString(){
-        return "Taş hareketi hatalidir.";
+        return this.message;
     }
     public String getMessage(){
         return this.message;

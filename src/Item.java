@@ -51,14 +51,8 @@ public abstract class Item extends AbstractItem{
 			return null;
 		}
 	}
-	public void putItemToDestination(String destination){
-		Item willBeBeatenItem;
-		try{
-			willBeBeatenItem = getBoard().getItem(destination);
-		}catch (OutOfBoardException e){
-			System.out.println(e.getMessage());
-			return;
-		}
+	public void putItemToDestination(String destination) throws OutOfBoardException{
+		Item willBeBeatenItem = getBoard().getItem(destination);
 		if(willBeBeatenItem!= null && willBeBeatenItem.getOwner().equals(getOwner())){
 			System.out.println("Chariot. Kendi taşının üstüne hareket edemez.");
 		}

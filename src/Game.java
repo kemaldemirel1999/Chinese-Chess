@@ -36,9 +36,6 @@ public class Game extends AbstractGame{
         }catch (OutOfBoardException e){
             System.out.println(e);
         }
-        if(previousPlayerNumber == which_players_turn){
-            System.out.println("Hatali hareket");
-        }
     }
 
     public int getWhich_players_turn() {

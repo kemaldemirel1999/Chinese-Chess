@@ -11,6 +11,6 @@ public class OutOfBoardException extends Exception{
         return message;
     }
     public String toString(){
-        return "Exception!! Index disine cikildi.";
+        return this.message;
     }
 }
