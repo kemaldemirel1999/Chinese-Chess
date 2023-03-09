@@ -231,5 +231,29 @@ public abstract class Item extends AbstractItem{
 		return  false;
 	}
 
+	/*public boolean checkFlyingGeneralRule(String oldPositionOfItem, String newPositionOfItem){
+		Item redGeneral = getOwnGeneral(getGame().red);
+		Item blackGeneral = getOwnGeneral(getGame().black);
+
+		int[] distance = calculateDistance(redGeneral.getPosition(), blackGeneral.getPosition());
+		int rowDiff = distance[0];
+		int colDiff = distance[1];
+		if(colDiff == 0){
+			if(  redGeneral.isRowClear(blackGeneral.getPosition(), rowDiff)  ){
+
+			}
+		}
+		return true;
+	}
+
+	public Item getOwnGeneral(Player p){
+		for(Item t: board.items){
+			if(p.equals(t.getOwner()) && (t.getName().equals("ş") || t.getName().equals("ş")) ){
+				return t;
+			}
+		}
+		return null;
+	}*/
+
 
 }

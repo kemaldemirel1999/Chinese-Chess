@@ -48,6 +48,7 @@ public class Board extends AbstractBoard{
 		}
 		return null;
 	}
+
 	public void print() {
 		for (int row=0; row<chessBoard.length; row++){
 			System.out.print(lineCode[row]+"\t");

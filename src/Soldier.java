@@ -47,10 +47,6 @@ public class Soldier extends Item{
 
     @Override
     public void move(String destination) {
-        if(endOfTable){
-            System.out.println("Soldier hareket edemez.Tahta sonuna ulaşıldı");
-            return;
-        }
         int[] distance = calculateDistance(getPosition(), destination);
         if(distance != null){
             int rowDiff = distance[0];
@@ -60,6 +56,9 @@ public class Soldier extends Item{
                     putItemToDestination(destination);
                     if(!riverCrossed){
                         riverCrossed = isRiverCrossed();
+                        if(riverCrossed){
+                            setValue(2);
+                        }
                     }
                 }
             } catch (OutOfBoardException | PieceMovementException e) {
