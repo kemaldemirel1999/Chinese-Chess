@@ -31,7 +31,7 @@ public class General extends Item{
                     putItemToDestination(destination);
                 }
             } catch (OutOfBoardException| FlyingRuleException | PieceMovementException e) {
-                e.printStackTrace();
+                System.out.println(e);
             }
         }
     }

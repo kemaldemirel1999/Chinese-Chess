@@ -30,7 +30,7 @@ public class Elephant extends Item{
                         }
                     }
                 } catch (OutOfBoardException| FlyingRuleException | PieceMovementException e) {
-                    e.printStackTrace();
+                    System.out.println(e);
                 }
             }
         }

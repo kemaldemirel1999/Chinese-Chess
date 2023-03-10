@@ -62,7 +62,7 @@ public class Soldier extends Item{
                     }
                 }
             } catch (OutOfBoardException | FlyingRuleException |PieceMovementException e) {
-                e.printStackTrace();
+                System.out.println(e);
             }
         }
     }

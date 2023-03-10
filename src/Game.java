@@ -77,18 +77,19 @@ public class Game extends AbstractGame{
             }
             outputStream.write(byte_player_and_game_infos);
             for(Item item : board.items){
-                byte[] bytePieceInfos = new byte[12];
+                byte[] bytePieceInfos = new byte[10];
                 char itemName = item.getName().charAt(0);
                 int value = Float.floatToIntBits(item.getValue());
                 char row = item.getPosition().charAt(0);
-                int col = Integer.parseInt(item.getPosition().substring(1,2));
+                char col = item.getPosition().charAt(1);
+                //int col = Integer.parseInt(item.getPosition().substring(1,2));
                 for(int i=0; i<2; i++){
                     bytePieceInfos[i] = (byte) (itemName >> (i * 8));
                     bytePieceInfos[i+6] = (byte) (row >> (i * 8));
+                    bytePieceInfos[i+8] = (byte) (col >> (i * 8));
                 }
                 for(int i=0; i<4; i++){
-                    byte_player_and_game_infos[i+2] = (byte) (value >> (i * 8));
-                    bytePieceInfos[i+8] = (byte) (col >> (i * 8) & 0xFF);
+                    bytePieceInfos[i+2] = (byte) (value >> (i * 8));
                 }
                 outputStream.write(bytePieceInfos);
             }
@@ -188,6 +189,8 @@ public class Game extends AbstractGame{
                     }
                     board.items[index].setOwner(black);
                 }
+                board.items[index].setBoard(board);
+                board.items[index].setGame(this);
                 index++;
             }
         } catch (FileNotFoundException e) {
@@ -198,8 +201,8 @@ public class Game extends AbstractGame{
         FileInputStream inputStream = null;
         try {
             inputStream = new FileInputStream(address);
+            board = new Board();
             byte[] buffer = new byte[4];
-
             inputStream.read(buffer);
             red.setPuan(ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getFloat());
             inputStream.read(buffer);
@@ -218,9 +221,9 @@ public class Game extends AbstractGame{
                 buffer = new byte[2];
                 inputStream.read(buffer);
                 char row = ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getChar();
-                buffer = new byte[4];
+                buffer = new byte[2];
                 inputStream.read(buffer);
-                int col = ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getInt();
+                String col = ""+ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getChar();
                 String position = row+""+col;
                 switch (itemName) {
                     case "k":
@@ -241,7 +244,7 @@ public class Game extends AbstractGame{
                     case "t":
                         board.items[i] = new Cannon(position, itemName, value);
                         break;
-                    case "e":
+                    case "p":
                         board.items[i] = new Soldier(position, itemName, value);
                         break;
                     case "K":
@@ -262,7 +265,7 @@ public class Game extends AbstractGame{
                     case "T":
                         board.items[i] = new Cannon(position, itemName, value);
                         break;
-                    case "E":
+                    case "P":
                         board.items[i] = new Soldier(position, itemName, value);
                         break;
                 }
@@ -271,11 +274,9 @@ public class Game extends AbstractGame{
                 }else{
                     board.items[i].setOwner(black);
                 }
-
-
-
+                board.items[i].setBoard(board);
+                board.items[i].setGame(this);
             }
-
             inputStream.close();
 
         } catch (IOException e) {
