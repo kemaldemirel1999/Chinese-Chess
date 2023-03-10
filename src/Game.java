@@ -156,7 +156,7 @@ public class Game extends AbstractGame{
                         case "t":
                             board.items[index] = new Cannon(position, itemName, value);
                             break;
-                        case "e":
+                        case "p":
                             board.items[index] = new Soldier(position, itemName, value);
                             break;
                     }
@@ -182,7 +182,7 @@ public class Game extends AbstractGame{
                         case "T":
                             board.items[index] = new Cannon(position, itemName, value);
                             break;
-                        case "E":
+                        case "P":
                             board.items[index] = new Soldier(position, itemName, value);
                             break;
                     }

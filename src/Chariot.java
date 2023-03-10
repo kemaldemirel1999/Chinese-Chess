@@ -23,7 +23,7 @@ public class Chariot extends Item{
                         }
                     }
                 }
-            }catch (PieceMovementException | OutOfBoardException e){
+            }catch (PieceMovementException| FlyingRuleException | OutOfBoardException e){
                 System.out.println(e);
             }
         }

@@ -42,7 +42,7 @@ public class Cannon extends Item{
                         }
                     }
                 }
-            } catch (OutOfBoardException | PieceMovementException e) {
+            } catch (OutOfBoardException| FlyingRuleException | PieceMovementException e) {
                 System.out.println(e);
             }
         }

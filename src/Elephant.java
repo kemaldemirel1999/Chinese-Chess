@@ -29,7 +29,7 @@ public class Elephant extends Item{
                             putItemToDestination(destination);
                         }
                     }
-                } catch (OutOfBoardException | PieceMovementException e) {
+                } catch (OutOfBoardException| FlyingRuleException | PieceMovementException e) {
                     e.printStackTrace();
                 }
             }

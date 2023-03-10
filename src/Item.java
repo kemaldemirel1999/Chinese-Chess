@@ -51,22 +51,41 @@ public abstract class Item extends AbstractItem{
 			return null;
 		}
 	}
-	public void putItemToDestination(String destination) throws OutOfBoardException{
+	public void putItemToDestination(String destination) throws OutOfBoardException,FlyingRuleException{
 		Item willBeBeatenItem = getBoard().getItem(destination);
 		if(willBeBeatenItem!= null && willBeBeatenItem.getOwner().equals(getOwner())){
 			System.out.println("Chariot. Kendi taşının üstüne hareket edemez.");
 		}
 		// Başarılı hareket. Rakip taş yenildi.
 		else if(willBeBeatenItem != null){
+			String willBeBeatenItemPosition = willBeBeatenItem.getPosition();
+			float willBeBeatenItemValue = willBeBeatenItem.getValue();
+			String movedItemOldPosition = getPosition();
 			getOwner().setPuan(getOwner().getPuan() + willBeBeatenItem.getValue());
 			willBeBeatenItem.setPosition("xx");
 			setPosition(destination);
-			game.changePlayerTurn();
+			if(checkFlyingGeneralRule()){
+				game.changePlayerTurn();
+			}
+			else{
+				getOwner().setPuan(getOwner().getPuan() - willBeBeatenItemValue);
+				willBeBeatenItem.setPosition(willBeBeatenItemPosition);
+				setPosition(movedItemOldPosition);
+				throw new FlyingRuleException("Flying Rule yüzünden hamle yapilamaz.");
+			}
+
 		}
 		// Başarılı hareket. Boş pozisyona hareket edildi.
 		else{
+			String movedItemOldPosition = getPosition();
 			setPosition(destination);
-			game.changePlayerTurn();
+			if(checkFlyingGeneralRule()){
+				game.changePlayerTurn();
+			}
+			else{
+				setPosition(movedItemOldPosition);
+				throw new FlyingRuleException("Flying Rule yüzünden hamle yapilamaz.");
+			}
 		}
 	}
 
@@ -231,7 +250,7 @@ public abstract class Item extends AbstractItem{
 		return  false;
 	}
 
-	/*public boolean checkFlyingGeneralRule(String oldPositionOfItem, String newPositionOfItem){
+	public boolean checkFlyingGeneralRule(){
 		Item redGeneral = getOwnGeneral(getGame().red);
 		Item blackGeneral = getOwnGeneral(getGame().black);
 
@@ -240,7 +259,7 @@ public abstract class Item extends AbstractItem{
 		int colDiff = distance[1];
 		if(colDiff == 0){
 			if(  redGeneral.isRowClear(blackGeneral.getPosition(), rowDiff)  ){
-
+				return false;
 			}
 		}
 		return true;
@@ -248,12 +267,12 @@ public abstract class Item extends AbstractItem{
 
 	public Item getOwnGeneral(Player p){
 		for(Item t: board.items){
-			if(p.equals(t.getOwner()) && (t.getName().equals("ş") || t.getName().equals("ş")) ){
+			if(p.equals(t.getOwner()) && (t.getName().equals("Ş") || t.getName().equals("ş")) ){
 				return t;
 			}
 		}
 		return null;
-	}*/
+	}
 
 
 }
