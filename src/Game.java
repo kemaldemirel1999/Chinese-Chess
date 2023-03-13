@@ -93,7 +93,34 @@ public class Game extends AbstractGame{
                 }
                 outputStream.write(bytePieceInfos);
             }
+            char[] redNameCharArray = red.getPlayer_name().toCharArray();
+            char[] blackNameCharArray = black.getPlayer_name().toCharArray();
+            byte[] byteRedNameInfo = new byte[redNameCharArray.length * 2];
+            byte[] byteBlackNameInfo = new byte[blackNameCharArray.length * 2];
+            int currentIndex = 0;
+            for (char c: redNameCharArray){
+                for(int i=0; i<2; i++){
+                    byteRedNameInfo[currentIndex] = (byte) (c >> (i * 8));
+                    currentIndex++;
+                }
+            }
+            currentIndex = 0;
+            for (char c: blackNameCharArray){
+                for(int i=0; i<2; i++){
+                    byteBlackNameInfo[currentIndex] = (byte) (c >> (i * 8));
+                    currentIndex++;
+                }
+            }
+            char delimiter = '$';
+            byte[] byteDelimiterInfo = new byte[2];
+            for(int i=0; i<2; i++){
+                byteDelimiterInfo[i] = (byte) (delimiter >> (i * 8));
+            }
+            outputStream.write(byteRedNameInfo);
+            outputStream.write(byteDelimiterInfo);
+            outputStream.write(byteBlackNameInfo);
 
+            outputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -102,8 +129,8 @@ public class Game extends AbstractGame{
         PrintWriter outputStream = null;
         try {
             outputStream = new PrintWriter(new FileWriter(address,false));
-            outputStream.println("red player score:"+red.getPuan());
-            outputStream.println("black player score:"+black.getPuan());
+            outputStream.println("red player score:"+red.getPuan()+", "+red.getPlayer_name());
+            outputStream.println("black player score:"+black.getPuan()+", "+black.getPlayer_name());
             outputStream.println("which_players_turn:"+which_players_turn);
             for(Item item : board.items){
                 if(item.getOwner().equals(red)){
@@ -126,8 +153,10 @@ public class Game extends AbstractGame{
             inputStream = new Scanner(new FileInputStream(address));
             String redInfo = inputStream.nextLine();
             String blackInfo = inputStream.nextLine();
-            red.setPuan(Float.parseFloat(redInfo.substring(redInfo.indexOf(":")+1)));
-            black.setPuan(Float.parseFloat(blackInfo.substring(blackInfo.indexOf(":")+1)));
+            red.setPuan(Float.parseFloat(redInfo.substring(redInfo.indexOf(":")+1, redInfo.indexOf(","))));
+            red.setPlayer_name(redInfo.substring(redInfo.indexOf(",")+2));
+            black.setPuan(Float.parseFloat(blackInfo.substring(blackInfo.indexOf(":")+1, blackInfo.indexOf(","))));
+            black.setPlayer_name(blackInfo.substring(blackInfo.indexOf(",")+2));
             String turnInfo = inputStream.nextLine();
             which_players_turn = Integer.parseInt(turnInfo.substring(turnInfo.indexOf(":")+1));
             inputStream.useDelimiter(",");
@@ -277,8 +306,40 @@ public class Game extends AbstractGame{
                 board.items[i].setBoard(board);
                 board.items[i].setGame(this);
             }
-            inputStream.close();
 
+            String redName = "";
+            buffer = new byte[2];
+            while(true){
+                int nextByte = inputStream.read(buffer);
+                if(nextByte == -1){
+                    break;
+                }
+                char character = ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getChar();
+                if(character == '$'){
+                    break;
+                }
+                else{
+                    redName = redName + character;
+                }
+            }
+            String blackName = "";
+            buffer = new byte[2];
+            while(true){
+                int nextByte = inputStream.read(buffer);
+                if(nextByte == -1){
+                    break;
+                }
+                char character = ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getChar();
+                if(character == '$'){
+                    break;
+                }
+                else{
+                    blackName = blackName + character;
+                }
+            }
+            red.setPlayer_name(redName);
+            black.setPlayer_name(blackName);
+            inputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
