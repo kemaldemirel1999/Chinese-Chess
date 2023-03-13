@@ -76,21 +76,22 @@ public abstract class Item extends AbstractItem{
 					return;
 				}
 			}
+			boolean checkMateRule = checkCheckMateRule();
+			boolean checkFlyingGeneralRule = checkFlyingGeneralRule();
 			// Şah-Mat Rule kontrol edilir.
-			if(checkCheckMateRule() && checkFlyingGeneralRule() && !isItCheckMateMove){
+			if(checkMateRule && checkFlyingGeneralRule && !isItCheckMateMove){
 				game.changePlayerTurn();
 			}
 			else{
 				getOwner().setPuan(getOwner().getPuan() - willBeBeatenItemValue);
 				willBeBeatenItem.setPosition(willBeBeatenItemPosition);
 				setPosition(movedItemOldPosition);
-				if(checkCheckMateRule() == false){
+				if(checkMateRule == false){
 					throw new CheckMateException("Check-Mate yüzünden hamle yapilamaz.");
 				}
-				if(checkFlyingGeneralRule() == false){
+				if(checkFlyingGeneralRule == false){
 					throw new FlyingRuleException("Flying Rule sebebiyle hamle yapilamaz.");
 				}
-
 			}
 		}
 		// Başarılı hareket. Boş pozisyona hareket edildi.
@@ -101,8 +102,9 @@ public abstract class Item extends AbstractItem{
 				game.changePlayerTurn();
 			}
 			else{
+				boolean tmp = checkFlyingGeneralRule();
 				setPosition(movedItemOldPosition);
-				if(!checkFlyingGeneralRule()){
+				if(!tmp){
 					throw new FlyingRuleException("Flying Rule yüzünden hamle yapilamaz.");
 				}
 			}
