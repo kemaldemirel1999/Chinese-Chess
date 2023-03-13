@@ -32,7 +32,7 @@ public class Advisor extends Item{
                         putItemToDestination(destination);
                     }
                 }
-            } catch (OutOfBoardException| FlyingRuleException | PieceMovementException e) {
+            } catch (OutOfBoardException | FlyingRuleException | PieceMovementException | CheckMateException e) {
                 System.out.println(e);
             }
         }

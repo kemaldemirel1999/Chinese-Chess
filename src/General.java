@@ -14,7 +14,7 @@ public class General extends Item{
         if(!isItemInOwnPalace(destination)){
             throw new PieceMovementException("General. Hatali Haraket.");
         }
-        if(!((rowDiff == 0 && Math.abs(colDiff) == 1 ) || (Math.abs(rowDiff) == 1 && colDiff == 0))){
+        if(!((rowDiff == 0 && Math.abs(colDiff) == 1 ) || (Math.abs(rowDiff) == 1 && colDiff == 0) ) ){
             throw new PieceMovementException("General. Hatali Haraket.");
         }
         return true;
@@ -30,7 +30,7 @@ public class General extends Item{
                 if(isItSuitableMove(destination, rowDiff, colDiff)){
                     putItemToDestination(destination);
                 }
-            } catch (OutOfBoardException| FlyingRuleException | PieceMovementException e) {
+            } catch (OutOfBoardException | FlyingRuleException | PieceMovementException | CheckMateException e) {
                 System.out.println(e);
             }
         }

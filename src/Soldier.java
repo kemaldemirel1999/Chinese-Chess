@@ -62,7 +62,7 @@ public class Soldier extends Item{
                         }
                     }
                 }
-            } catch (OutOfBoardException | FlyingRuleException |PieceMovementException e) {
+            } catch (OutOfBoardException | FlyingRuleException | CheckMateException |PieceMovementException e) {
                 System.out.println(e);
             }
         }

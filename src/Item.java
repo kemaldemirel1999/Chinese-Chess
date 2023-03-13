@@ -51,7 +51,7 @@ public abstract class Item extends AbstractItem{
 			return null;
 		}
 	}
-	public void putItemToDestination(String destination) throws OutOfBoardException,FlyingRuleException{
+	public void putItemToDestination(String destination) throws OutOfBoardException, FlyingRuleException, CheckMateException {
 		Item willBeBeatenItem = getBoard().getItem(destination);
 		if(willBeBeatenItem!= null && willBeBeatenItem.getOwner().equals(getOwner())){
 			System.out.println("Chariot. Kendi taşının üstüne hareket edemez.");
@@ -68,16 +68,23 @@ public abstract class Item extends AbstractItem{
 				getOwner().setWinner(true);
 				return;
 			}
-			if(checkFlyingGeneralRule()){
+
+			// Şah-Mat Rule kontrol edilir.
+			if(checkCheckMateRule() && checkFlyingGeneralRule()){
 				game.changePlayerTurn();
 			}
 			else{
 				getOwner().setPuan(getOwner().getPuan() - willBeBeatenItemValue);
 				willBeBeatenItem.setPosition(willBeBeatenItemPosition);
 				setPosition(movedItemOldPosition);
-				throw new FlyingRuleException("Flying Rule yüzünden hamle yapilamaz.");
-			}
+				if(checkCheckMateRule() == false){
+					throw new CheckMateException("Check-Mate yüzünden hamle yapilamaz.");
+				}
+				if(checkFlyingGeneralRule() == false){
+					throw new FlyingRuleException("Flying Rule yüzünden hamle yapilamaz.");
+				}
 
+			}
 		}
 		// Başarılı hareket. Boş pozisyona hareket edildi.
 		else{
@@ -276,6 +283,16 @@ public abstract class Item extends AbstractItem{
 			}
 		}
 		return null;
+	}
+
+	public boolean checkCheckMateRule(){
+		Item ownGeneral = getOwnGeneral(getOwner());
+
+		for(Item t: board.items){
+
+		}
+
+		return true;
 	}
 	
 

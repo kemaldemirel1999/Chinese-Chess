@@ -13,6 +13,9 @@ public class Elephant extends Item{
         if(Math.abs(rowDiff) != Math.abs(colDiff) || ( rowDiff == 0 || colDiff == 0) ){
             throw new PieceMovementException("Elephant. Hatali Hareket.");
         }
+        if(Math.abs(rowDiff) != 2 || Math.abs(colDiff) != 2){
+            throw new PieceMovementException("Elephant. Hatali Hareket.");
+        }
         return true;
     }
 
@@ -29,7 +32,7 @@ public class Elephant extends Item{
                             putItemToDestination(destination);
                         }
                     }
-                } catch (OutOfBoardException| FlyingRuleException | PieceMovementException e) {
+                } catch (OutOfBoardException | FlyingRuleException | PieceMovementException | CheckMateException e) {
                     System.out.println(e);
                 }
             }
