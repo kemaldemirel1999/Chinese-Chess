@@ -147,6 +147,17 @@ public class Game extends AbstractGame{
             }
             outputStream.write(byteWinnerInfo);
 
+            byte[] byteDrawInfo = new byte[4];
+            int drawNo = 0;
+            if(isItDraw){
+                drawNo = 1;
+            }
+            for(int i=0; i<4; i++){
+                byteDrawInfo[i] = (byte) (drawNo >> (i * 8) & 0xFF);
+            }
+            outputStream.write(byteDrawInfo);
+
+
             char[] redNameCharArray = red.getPlayer_name().toCharArray();
             char[] blackNameCharArray = black.getPlayer_name().toCharArray();
             byte[] byteRedNameInfo = new byte[redNameCharArray.length * 2];
@@ -196,6 +207,12 @@ public class Game extends AbstractGame{
             else if(winnerPlayer.equals(black)){
                 outputStream.println("kazanan:2");
             }
+            if(isItDraw){
+                outputStream.println("esitlik:true");
+            }
+            else{
+                outputStream.println("esitlik:false");
+            }
             for(Item item : board.items){
                 if(item.getOwner().equals(red)){
                     outputStream.println("red,"+item.getName()+","+item.getValue()+","+item.getPosition());
@@ -233,6 +250,13 @@ public class Game extends AbstractGame{
             }
             else if(winnerPlayer == 2){
                 setWinnerPlayer(black);
+            }
+            String drawInfo = inputStream.nextLine();
+            drawInfo = drawInfo.substring(winnerInfo.indexOf(":")+1);
+            if(drawInfo.equals("true")){
+                this.isItDraw = true;
+            }else{
+                this.isItDraw = false;
             }
             inputStream.useDelimiter(",");
             int index = 0;
@@ -393,6 +417,16 @@ public class Game extends AbstractGame{
             }
             else if(winnerNo == 2){
                 setWinnerPlayer(black);
+            }
+
+            buffer = new byte[4];
+            inputStream.read(buffer);
+            int drawNo = ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getInt();
+            if(drawNo == 0){
+                this.isItDraw = false;
+            }
+            else if(drawNo == 1){
+                this.isItDraw = true;
             }
 
             String redName = "";
