@@ -302,7 +302,6 @@ public abstract class Item extends AbstractItem{
 
 	public boolean checkCheckMateRule(){
 		Item ownGeneral = getOwnGeneral(getOwner());
-		System.out.println("OWN GENERAL:"+ownGeneral.getPosition());
 		for(Item t: board.items){
 			if(  !t.getOwner().equals(getOwner())){
 				if(	t.moveCheck(ownGeneral.getPosition()) && !t.getPosition().equals("xx")){

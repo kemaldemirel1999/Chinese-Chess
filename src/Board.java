@@ -73,12 +73,31 @@ public class Board extends AbstractBoard{
 				ctr++;
 			}
 			System.out.println();
-			if(row == 0)	System.out.println(" \t|  |  |  |\\ | /|  |  |  |");
-			if(row == 1)	System.out.println(" \t|  |  |  |/ | \\|  |  |  |");
-			if(row == 2 || row == 3 || row == 5 || row == 6)	System.out.println(" \t|  |  |  |  |  |  |  |  |");
-			if(row == 4)	System.out.println(" \t|                       |");
-			if(row == 7)	System.out.println(" \t|  |  |  |/ | \\|  |  |  |");
-			if(row == 8) 	System.out.println(" \t|  |  |  |\\ | /|  |  |  |");
+			if(row == 0)	{
+				//System.out.println(" \t|  |  |  |\\ | /|  |  |  |");
+				System.out.println(" \t| | | |\\ | /| | | |");
+			}
+			if(row == 1)	{
+				//System.out.println(" \t|  |  |  |/ | \\|  |  |  |");
+				System.out.println(" \t| | | |/ | \\| | | |");
+			}
+			if(row == 2 || row == 3 || row == 5 || row == 6)	{
+				//System.out.println(" \t|  |  |  |  |  |  |  |  |");
+				System.out.println(" \t| | | | | | | | |");
+			}
+			if(row == 4)	{
+				//System.out.println(" \t|                       |");
+				System.out.println(" \t| |");
+			}
+			if(row == 7)	{
+				//System.out.println(" \t|  |  |  |/ | \\|  |  |  |");
+				System.out.println(" \t| | | |/ | \\| | | |");
+			}
+			if(row == 8){
+				//System.out.println(" \t|  |  |  |\\ | /|  |  |  |");
+				System.out.println(" \t| | | |\\ | /| | | |");
+			}
+
 		}
 		System.out.println();
 		System.out.println(" \t1--2--3--4--5--6--7--8--9");
