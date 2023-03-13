@@ -1,0 +1,36 @@
+red player score:0.0, A
+black player score:0.0, B
+which_players_turn:2
+kazanan:0
+black,P,1.0,g1
+black,P,1.0,g3
+black,P,1.0,g5
+black,P,1.0,g7
+black,P,1.0,g9
+black,A,4.0,j2
+black,A,4.0,j8
+black,K,9.0,j1
+black,K,9.0,j9
+black,F,2.0,j3
+black,F,2.0,j7
+black,T,4.5,h2
+black,T,4.5,h8
+black,V,2.0,j4
+black,V,2.0,j6
+black,Ş,0.0,j5
+red,p,1.0,e1
+red,p,1.0,d3
+red,p,1.0,d5
+red,p,1.0,d7
+red,p,1.0,d9
+red,a,4.0,a2
+red,a,4.0,a8
+red,k,9.0,a1
+red,k,9.0,a9
+red,f,2.0,a3
+red,f,2.0,a7
+red,t,4.5,c2
+red,t,4.5,c8
+red,v,2.0,a4
+red,v,2.0,a6
+red,ş,0.0,a5

@@ -64,6 +64,10 @@ public abstract class Item extends AbstractItem{
 			getOwner().setPuan(getOwner().getPuan() + willBeBeatenItem.getValue());
 			willBeBeatenItem.setPosition("xx");
 			setPosition(destination);
+			if(willBeBeatenItem.getName().toLowerCase().equals("ş")){
+				getOwner().setWinner(true);
+				return;
+			}
 			if(checkFlyingGeneralRule()){
 				game.changePlayerTurn();
 			}

@@ -7,6 +7,7 @@ import java.util.Scanner;
 public class Game extends AbstractGame{
 
     private int which_players_turn = -1;
+    private Player winnerPlayer;
 
     public Game(String p1_name, String p2_name){
         red = new Player(p1_name);  // Player1(küçükler)
@@ -14,6 +15,7 @@ public class Game extends AbstractGame{
         board = new Board();
         which_players_turn = 1;
         Item[] items = board.items;
+        winnerPlayer = null;
         for (int i=0, j= items.length/2 ;i<items.length/2 && j<items.length; i++, j++){
             items[i].setOwner(black);
             items[j].setOwner(red);
@@ -23,13 +25,28 @@ public class Game extends AbstractGame{
             items[j].setGame(this);
         }
     }
+
+    public Player getWinnerPlayer() {
+        return winnerPlayer;
+    }
+
+    public void setWinnerPlayer(Player winnerPlayer) {
+        this.winnerPlayer = winnerPlayer;
+    }
+
     public void play(String from, String to){
+        if(winnerPlayer != null){
+            System.out.println("Oyun sonlandigi icin hamle yapilamaz. Kazanan:"+winnerPlayer.getPlayer_name());
+            return;
+        }
         try{
             Item item = board.getItem(from);
             if(item != null){
+                // RED's turn
                 if(item.getOwner().equals(red) && which_players_turn == 1){
                     item.move(to);
                 }
+                // BLACK's turn
                 else if(item.getOwner().equals(black) && which_players_turn == 2){
                     item.move(to);
                 }
@@ -39,6 +56,14 @@ public class Game extends AbstractGame{
             }
         }catch (OutOfBoardException e){
             System.out.println(e);
+        }
+        if(red.isWinner()){
+            System.out.println("Oyun sonlandi. Kazanan(RED):"+red.getPlayer_name());
+            winnerPlayer = red;
+        }
+        else if(black.isWinner()){
+            System.out.println("Oyun sonlandi. Kazanan(BLACK):"+black.getPlayer_name());
+            winnerPlayer = black;
         }
     }
 
@@ -93,6 +118,21 @@ public class Game extends AbstractGame{
                 }
                 outputStream.write(bytePieceInfos);
             }
+            int winnerPlayerNo = 0;
+            if(winnerPlayer != null){
+                if(winnerPlayer.equals(red)){
+                    winnerPlayerNo = 1;
+                }
+                else if(winnerPlayer.equals(black)){
+                    winnerPlayerNo = 2;
+                }
+            }
+            byte[] byteWinnerInfo = new byte[4];
+            for(int i=0; i<4; i++){
+                byteWinnerInfo[i] = (byte) (winnerPlayerNo >> (i * 8) & 0xFF);
+            }
+            outputStream.write(byteWinnerInfo);
+
             char[] redNameCharArray = red.getPlayer_name().toCharArray();
             char[] blackNameCharArray = black.getPlayer_name().toCharArray();
             byte[] byteRedNameInfo = new byte[redNameCharArray.length * 2];
@@ -120,6 +160,7 @@ public class Game extends AbstractGame{
             outputStream.write(byteDelimiterInfo);
             outputStream.write(byteBlackNameInfo);
 
+
             outputStream.close();
         } catch (IOException e) {
             e.printStackTrace();
@@ -132,6 +173,15 @@ public class Game extends AbstractGame{
             outputStream.println("red player score:"+red.getPuan()+", "+red.getPlayer_name());
             outputStream.println("black player score:"+black.getPuan()+", "+black.getPlayer_name());
             outputStream.println("which_players_turn:"+which_players_turn);
+            if(winnerPlayer==null){
+                outputStream.println("kazanan:0");
+            }
+            else if(winnerPlayer.equals(red)){
+                outputStream.println("kazanan:1");
+            }
+            else if(winnerPlayer.equals(black)){
+                outputStream.println("kazanan:2");
+            }
             for(Item item : board.items){
                 if(item.getOwner().equals(red)){
                     outputStream.println("red,"+item.getName()+","+item.getValue()+","+item.getPosition());
@@ -159,6 +209,17 @@ public class Game extends AbstractGame{
             black.setPlayer_name(blackInfo.substring(blackInfo.indexOf(",")+2));
             String turnInfo = inputStream.nextLine();
             which_players_turn = Integer.parseInt(turnInfo.substring(turnInfo.indexOf(":")+1));
+            String winnerInfo = inputStream.nextLine();
+            int winnerPlayer = Integer.parseInt(winnerInfo.substring(winnerInfo.indexOf(":")+1));
+            if(winnerPlayer == 0){
+                setWinnerPlayer(null);
+            }
+            else if(winnerPlayer == 1){
+                setWinnerPlayer(red);
+            }
+            else if(winnerPlayer == 2){
+                setWinnerPlayer(black);
+            }
             inputStream.useDelimiter(",");
             int index = 0;
             while(inputStream.hasNextLine()){
@@ -305,6 +366,19 @@ public class Game extends AbstractGame{
                 }
                 board.items[i].setBoard(board);
                 board.items[i].setGame(this);
+            }
+            int winnerNo = 0;
+            buffer = new byte[4];
+            inputStream.read(buffer);
+            winnerNo = ByteBuffer.wrap(buffer).order(ByteOrder.LITTLE_ENDIAN).getInt();
+            if(winnerNo == 0){
+                setWinnerPlayer(null);
+            }
+            else if(winnerNo == 1){
+                setWinnerPlayer(red);
+            }
+            else if(winnerNo == 2){
+                setWinnerPlayer(black);
             }
 
             String redName = "";
