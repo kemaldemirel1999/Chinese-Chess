@@ -14,7 +14,7 @@ public class Advisor extends Item{
         if(!isItemInOwnPalace(destination)){
             throw new PieceMovementException("Advisor. Hatali Haraket.");
         }
-        if(Math.abs(rowDiff) > 2 || Math.abs(colDiff) > 2){
+        if(Math.abs(rowDiff) != 1 || Math.abs(colDiff) != 1){
             throw new PieceMovementException("Advisor. Hatali Haraket.");
         }
         return true;

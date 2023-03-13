@@ -219,10 +219,10 @@ public abstract class Item extends AbstractItem{
 	}
 
 	public boolean isRiverCrossed(){
-		if(getRowName().compareTo("e") > 0 && getGame().red.equals(getOwner())){
+		if(getPosition().charAt(0) > 'e' && getGame().red.equals(getOwner())){
 			return true;
 		}
-		else if(getRowName().compareTo("f") < 0 && getGame().black.equals(getOwner())){
+		else if(getPosition().charAt(0) < 'f' && getGame().black.equals(getOwner())){
 			return true;
 		}
 		return false;
