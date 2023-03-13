@@ -21,6 +21,7 @@ public class Elephant extends Item{
 
     @Override
     public void move(String destination) {
+        System.out.println("fil");
         if(!isItAfterRiver(destination)){
             int[] distance = calculateDistance(getPosition(), destination);
             if(distance != null){
@@ -39,6 +40,7 @@ public class Elephant extends Item{
         }
     }
 
+    @Override
     public boolean moveCheck(String destination) {
         if(!isItAfterRiver(destination)){
             int[] distance = calculateDistance(getPosition(), destination);

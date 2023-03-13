@@ -37,6 +37,35 @@ public class Game extends AbstractGame{
     }
 
     public void play(String from, String to){
+        try{
+            if(from.length() != 2 || to.length() !=2){
+                throw new WrongInputException();
+            }
+            String fromRow;
+            String toRow;
+            int fromCol;
+            int toCol;
+            try{
+                fromRow = from.substring(0,1);
+                toRow = to.substring(0,1);
+                fromCol = Integer.parseInt(from.substring(1));
+                toCol = Integer.parseInt(to.substring(1));
+            }catch (Exception e){
+                throw new WrongInputException();
+            }
+            if(fromRow.toLowerCase().charAt(0) > 'j' || fromRow.toLowerCase().charAt(0) < 'a'){
+                throw new WrongInputException();
+            }
+            if(toRow.toLowerCase().charAt(0) > 'j' || toRow.toLowerCase().charAt(0) < 'a'){
+                throw new WrongInputException();
+            }
+            if(fromCol > 9 ||fromCol < 1 || toCol >9 || toCol < 1){
+                throw new WrongInputException();
+            }
+        }catch (WrongInputException e){
+            System.out.println("Hatali input girişi. Tekrar deneyiniz.");
+            return;
+        }
         if(winnerPlayer != null){
             System.out.println("Oyun sonlandigi icin hamle yapilamaz. Kazanan:"+winnerPlayer.getPlayer_name());
             return;

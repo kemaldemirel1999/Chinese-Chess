@@ -66,6 +66,8 @@ public class Horse extends Item{
             }
         }
     }
+
+    @Override
     public boolean moveCheck(String destination) {
         int[] distance = calculateDistance(getPosition(), destination);
         if(distance != null){

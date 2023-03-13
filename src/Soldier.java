@@ -58,7 +58,6 @@ public class Soldier extends Item{
                         riverCrossed = isRiverCrossed();
                         if(riverCrossed){
                             setValue(2);
-                            System.out.println("Değer 2 oldu");
                         }
                     }
                 }
@@ -68,6 +67,8 @@ public class Soldier extends Item{
         }
     }
 
+
+    @Override
     public boolean moveCheck(String destination){
         int[] distance = calculateDistance(getPosition(), destination);
         if(distance != null){

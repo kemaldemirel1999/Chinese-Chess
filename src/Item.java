@@ -69,7 +69,6 @@ public abstract class Item extends AbstractItem{
 					getOwner().setPuan(getOwner().getPuan() - willBeBeatenItemValue);
 					willBeBeatenItem.setPosition(willBeBeatenItemPosition);
 					setPosition(movedItemOldPosition);
-					System.out.println("revert1");
 					return;
 				}
 				else{
@@ -77,9 +76,6 @@ public abstract class Item extends AbstractItem{
 					return;
 				}
 			}
-			System.out.println("checkmate:"+checkCheckMateRule());
-			System.out.println("checkfly:"+checkFlyingGeneralRule());
-			System.out.println("isMove:"+!isItCheckMateMove);
 			// Şah-Mat Rule kontrol edilir.
 			if(checkCheckMateRule() && checkFlyingGeneralRule() && !isItCheckMateMove){
 				game.changePlayerTurn();
@@ -106,7 +102,6 @@ public abstract class Item extends AbstractItem{
 			}
 			else{
 				setPosition(movedItemOldPosition);
-				System.out.println("revert3");
 				if(!checkFlyingGeneralRule()){
 					throw new FlyingRuleException("Flying Rule yüzünden hamle yapilamaz.");
 				}
@@ -118,6 +113,9 @@ public abstract class Item extends AbstractItem{
 		int fromLineIndex = getBoard().getLineCodeIndex(getPosition().substring(0,1));
 		int fromColumnIndex = Integer.parseInt(getPosition().substring(1,2));
 		int toColumnIndex = Integer.parseInt(destination.substring(1,2));
+		if(Math.abs(colDiff) == 1){
+			return true;
+		}
 		if(colDiff > 0){
 			for(int col=fromColumnIndex+1; col<toColumnIndex-1; col++){
 				Item tmp;
@@ -151,6 +149,9 @@ public abstract class Item extends AbstractItem{
 		int fromLineIndex = getBoard().getLineCodeIndex(getPosition().substring(0,1));
 		int toLineIndex = getBoard().getLineCodeIndex(destination.substring(0,1));
 		int fromColumnIndex = Integer.parseInt(getPosition().substring(1,2));
+		if(Math.abs(rowDiff) == 1){
+			return true;
+		}
 		if(rowDiff < 0){
 			for(int row=fromLineIndex+1; row<toLineIndex; row++){
 				Item tmp = null;
@@ -255,10 +256,10 @@ public abstract class Item extends AbstractItem{
 
 	public boolean isItAfterRiver(String destination){
 		if(getGame().red.equals(getOwner())){
-			return destination.substring(0, 1).charAt(0) <= 'e';
+			return !(destination.substring(0, 1).charAt(0) <= 'e');
 		}
 		else if(getGame().black.equals(getOwner())){
-			return destination.substring(0, 1).charAt(0) >= 'f';
+			return !(destination.substring(0, 1).charAt(0) >= 'f');
 		}
 		return true;
 	}
@@ -304,13 +305,13 @@ public abstract class Item extends AbstractItem{
 		for(Item t: board.items){
 			if(  !t.getOwner().equals(getOwner())){
 				if(	t.moveCheck(ownGeneral.getPosition()) && !t.getPosition().equals("xx")){
-					System.out.println("Yenebilir."+t.getPosition());
 					return false;
 				}
 			}
 		}
 		return true;
 	}
+
 
 
 }
