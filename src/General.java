@@ -28,12 +28,29 @@ public class General extends Item{
             int colDiff = distance[1];
             try {
                 if(isItSuitableMove(destination, rowDiff, colDiff)){
-                    putItemToDestination(destination);
+                    putItemToDestination(destination,false);
                 }
             } catch (OutOfBoardException | FlyingRuleException | PieceMovementException | CheckMateException e) {
                 System.out.println(e);
             }
         }
+    }
+
+
+    public boolean moveCheck(String destination) {
+        int[] distance = calculateDistance(getPosition(), destination);
+        if(distance != null){
+            int rowDiff = distance[0];
+            int colDiff = distance[1];
+            try {
+                if(isItSuitableMove(destination, rowDiff, colDiff)){
+                    putItemToDestination(destination,true);
+                }
+            } catch (OutOfBoardException | FlyingRuleException | PieceMovementException | CheckMateException e) {
+                return false;
+            }
+        }
+        return true;
     }
 
 }

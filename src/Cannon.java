@@ -27,18 +27,18 @@ public class Cannon extends Item{
                 if(isItSuitableMove(destination ,rowDiff, colDiff)){
                     if(isDestinationEmpty(destination)){
                         if(rowDiff != 0 && isRowClear(destination, rowDiff)){
-                            putItemToDestination(destination);
+                            putItemToDestination(destination,false);
                         }
                         else if(colDiff != 0 && isColumnClear(destination, colDiff) ){
-                            putItemToDestination(destination);
+                            putItemToDestination(destination,false);
                         }
                     }
                     else{
                         if(rowDiff != 0 && isRowCannonRuleSatisfy(destination, rowDiff)){
-                            putItemToDestination(destination);
+                            putItemToDestination(destination,false);
                         }
                         else if(colDiff != 0 && isColumnCannonRuleSatisfy(destination, rowDiff)){
-                            putItemToDestination(destination);
+                            putItemToDestination(destination,false);
                         }
                     }
                 }
@@ -46,8 +46,40 @@ public class Cannon extends Item{
                 System.out.println(e);
             }
         }
-
     }
+
+    public boolean moveCheck(String destination) {
+        int[] distance = calculateDistance(getPosition(), destination);
+        if(distance != null){
+            int rowDiff = distance[0];
+            int colDiff = distance[1];
+            try {
+                if(isItSuitableMove(destination ,rowDiff, colDiff)){
+                    if(isDestinationEmpty(destination)){
+                        if(rowDiff != 0 && isRowClear(destination, rowDiff)){
+                            putItemToDestination(destination,true);
+                        }
+                        else if(colDiff != 0 && isColumnClear(destination, colDiff) ){
+                            putItemToDestination(destination,true);
+                        }
+                    }
+                    else{
+                        if(rowDiff != 0 && isRowCannonRuleSatisfy(destination, rowDiff)){
+                            putItemToDestination(destination,true);
+                        }
+                        else if(colDiff != 0 && isColumnCannonRuleSatisfy(destination, rowDiff)){
+                            putItemToDestination(destination,true);
+                        }
+                    }
+                }
+            } catch (OutOfBoardException | FlyingRuleException | PieceMovementException | CheckMateException e) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
     public boolean isRowCannonRuleSatisfy(String destination, int rowDiff){
         int fromLineIndex = getBoard().getLineCodeIndex(getPosition().substring(0,1));
         int toLineIndex = getBoard().getLineCodeIndex(destination.substring(0,1));

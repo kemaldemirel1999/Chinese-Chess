@@ -14,12 +14,12 @@ public class Chariot extends Item{
                 if(isItSuitableMove(destination, rowDiff, colDiff)){
                     if(rowDiff != 0){
                         if (isRowClear(destination, rowDiff)){
-                            putItemToDestination(destination);
+                            putItemToDestination(destination,false);
                         }
                     }
                     else{
                         if (isColumnClear(destination, colDiff)){
-                            putItemToDestination(destination);
+                            putItemToDestination(destination,false);
                         }
                     }
                 }
@@ -27,6 +27,32 @@ public class Chariot extends Item{
                 System.out.println(e);
             }
         }
+    }
+
+    public boolean moveCheck(String destination) {
+        int[] distance = calculateDistance(getPosition(), destination);
+        if(distance != null){
+            int rowDiff = distance[0];
+            int colDiff = distance[1];
+            try{
+
+                if(isItSuitableMove(destination, rowDiff, colDiff)){
+                    if(rowDiff != 0){
+                        if (isRowClear(destination, rowDiff)){
+                            putItemToDestination(destination,true);
+                        }
+                    }
+                    else{
+                        if (isColumnClear(destination, colDiff)){
+                            putItemToDestination(destination,true);
+                        }
+                    }
+                }
+            }catch (PieceMovementException| FlyingRuleException | OutOfBoardException | CheckMateException e){
+                return false;
+            }
+        }
+        return true;
     }
 
 

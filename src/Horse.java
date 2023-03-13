@@ -58,7 +58,7 @@ public class Horse extends Item{
             try {
                 if(isItSuitableMove(destination, rowDiff, colDiff) ){
                     if(isEmptyWaypoint(destination, rowDiff, colDiff)){
-                        putItemToDestination(destination);
+                        putItemToDestination(destination,false);
                     }
                 }
             } catch (OutOfBoardException | FlyingRuleException | PieceMovementException | CheckMateException e) {
@@ -66,4 +66,22 @@ public class Horse extends Item{
             }
         }
     }
+    public boolean moveCheck(String destination) {
+        int[] distance = calculateDistance(getPosition(), destination);
+        if(distance != null){
+            int rowDiff = distance[0];
+            int colDiff = distance[1];
+            try {
+                if(isItSuitableMove(destination, rowDiff, colDiff) ){
+                    if(isEmptyWaypoint(destination, rowDiff, colDiff)){
+                        putItemToDestination(destination,true);
+                    }
+                }
+            } catch (OutOfBoardException | FlyingRuleException | PieceMovementException | CheckMateException e) {
+                return false;
+            }
+        }
+        return true;
+    }
+
 }
