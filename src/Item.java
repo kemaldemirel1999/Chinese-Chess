@@ -291,9 +291,7 @@ public abstract class Item extends AbstractItem{
 		for(Item t: board.items){
 
 		}
-
 		return true;
 	}
-	
 
 }

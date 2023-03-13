@@ -8,6 +8,7 @@ public class Game extends AbstractGame{
 
     private int which_players_turn = -1;
     private Player winnerPlayer;
+    private boolean isItDraw;
 
     public Game(String p1_name, String p2_name){
         red = new Player(p1_name);  // Player1(küçükler)
@@ -16,6 +17,7 @@ public class Game extends AbstractGame{
         which_players_turn = 1;
         Item[] items = board.items;
         winnerPlayer = null;
+        isItDraw = false;
         for (int i=0, j= items.length/2 ;i<items.length/2 && j<items.length; i++, j++){
             items[i].setOwner(black);
             items[j].setOwner(red);
@@ -39,6 +41,18 @@ public class Game extends AbstractGame{
             System.out.println("Oyun sonlandigi icin hamle yapilamaz. Kazanan:"+winnerPlayer.getPlayer_name());
             return;
         }
+        if(isItDraw){
+            System.out.println("Oyunda kazanan yoktur.Hamle yapılamaz. Eşitlik.");
+            return;
+        }
+        else{
+            if(!checkCriteriaOfDraw()){
+                System.out.println("Oyunda kazanan yoktur. Eşitlik.");
+                isItDraw = true;
+                return;
+            }
+        }
+
         try{
             Item item = board.getItem(from);
             if(item != null){
@@ -417,6 +431,29 @@ public class Game extends AbstractGame{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public boolean checkCriteriaOfDraw(){
+        int attackingItemsRed = 0;
+        int attackingItemsBlack = 0;
+        for(Item t: board.items){
+            if(t.getOwner().equals(red)){
+                String itemName = t.getName().toLowerCase();
+                if(itemName.equals("k") || itemName.equals("a") || itemName.equals("t") || itemName.equals("p")){
+                    attackingItemsRed++;
+                }
+            }
+            else if(t.getOwner().equals(black)){
+                String itemName = t.getName().toLowerCase();
+                if(itemName.equals("k") || itemName.equals("a") || itemName.equals("t") || itemName.equals("p")){
+                    attackingItemsBlack++;
+                }
+            }
+        }
+        if(attackingItemsRed == 0 && attackingItemsBlack == 0){
+            return false;
+        }
+        return true;
     }
 
 }
