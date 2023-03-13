@@ -10,7 +10,6 @@ public class Chariot extends Item{
             int rowDiff = distance[0];
             int colDiff = distance[1];
             try{
-
                 if(isItSuitableMove(destination, rowDiff, colDiff)){
                     if(rowDiff != 0){
                         if (isRowClear(destination, rowDiff)){

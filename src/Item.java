@@ -69,6 +69,7 @@ public abstract class Item extends AbstractItem{
 					getOwner().setPuan(getOwner().getPuan() - willBeBeatenItemValue);
 					willBeBeatenItem.setPosition(willBeBeatenItemPosition);
 					setPosition(movedItemOldPosition);
+					System.out.println("revert1");
 					return;
 				}
 				else{
@@ -76,7 +77,9 @@ public abstract class Item extends AbstractItem{
 					return;
 				}
 			}
-
+			System.out.println("checkmate:"+checkCheckMateRule());
+			System.out.println("checkfly:"+checkFlyingGeneralRule());
+			System.out.println("isMove:"+!isItCheckMateMove);
 			// Şah-Mat Rule kontrol edilir.
 			if(checkCheckMateRule() && checkFlyingGeneralRule() && !isItCheckMateMove){
 				game.changePlayerTurn();
@@ -103,6 +106,7 @@ public abstract class Item extends AbstractItem{
 			}
 			else{
 				setPosition(movedItemOldPosition);
+				System.out.println("revert3");
 				if(!checkFlyingGeneralRule()){
 					throw new FlyingRuleException("Flying Rule yüzünden hamle yapilamaz.");
 				}
@@ -299,7 +303,8 @@ public abstract class Item extends AbstractItem{
 		Item ownGeneral = getOwnGeneral(getOwner());
 		for(Item t: board.items){
 			if(  !t.getOwner().equals(getOwner())){
-				if(	t.moveCheck(ownGeneral.getPosition()) ){
+				if(	t.moveCheck(ownGeneral.getPosition()) && !t.getPosition().equals("xx")){
+					System.out.println("Yenebilir."+t.getPosition());
 					return false;
 				}
 			}
