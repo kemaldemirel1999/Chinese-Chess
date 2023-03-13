@@ -88,7 +88,7 @@ public abstract class Item extends AbstractItem{
 					throw new CheckMateException("Check-Mate yüzünden hamle yapilamaz.");
 				}
 				if(checkFlyingGeneralRule() == false){
-					throw new FlyingRuleException("Flying Rule yüzünden hamle yapilamaz.");
+					throw new FlyingRuleException("Flying Rule sebebiyle hamle yapilamaz.");
 				}
 
 			}
@@ -302,9 +302,11 @@ public abstract class Item extends AbstractItem{
 
 	public boolean checkCheckMateRule(){
 		Item ownGeneral = getOwnGeneral(getOwner());
+		System.out.println("OWN GENERAL:"+ownGeneral.getPosition());
 		for(Item t: board.items){
 			if(  !t.getOwner().equals(getOwner())){
 				if(	t.moveCheck(ownGeneral.getPosition()) && !t.getPosition().equals("xx")){
+					System.out.println(t.getPosition() + ", "+t.getName());
 					return false;
 				}
 			}

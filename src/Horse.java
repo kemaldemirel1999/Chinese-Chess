@@ -10,10 +10,10 @@ public class Horse extends Item{
         char row = destination.substring(0,1).toLowerCase().charAt(0);
         int col = Integer.parseInt(destination.substring(1,2));
         if(row < 'a' || row > 'j' || col < 1 || col > 9){
-            throw new OutOfBoardException("Horse. Hatali Hareket.");
+            throw new OutOfBoardException("Hatali Hareket.");
         }
         if(!((Math.abs(rowDiff) == 1 && Math.abs(colDiff) == 2) || (Math.abs(rowDiff) == 2 && Math.abs(colDiff) == 1))){
-            throw new PieceMovementException("Horse. Hatali Hareket.");
+            throw new PieceMovementException("Hatali Hareket.");
         }
         return true;
     }
@@ -77,13 +77,14 @@ public class Horse extends Item{
                 if(isItSuitableMove(destination, rowDiff, colDiff) ){
                     if(isEmptyWaypoint(destination, rowDiff, colDiff)){
                         putItemToDestination(destination,true);
+                        return true;
                     }
                 }
             } catch (OutOfBoardException | FlyingRuleException | PieceMovementException | CheckMateException e) {
                 return false;
             }
         }
-        return true;
+        return false;
     }
 
 }

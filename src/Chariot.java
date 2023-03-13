@@ -40,11 +40,13 @@ public class Chariot extends Item{
                     if(rowDiff != 0){
                         if (isRowClear(destination, rowDiff)){
                             putItemToDestination(destination,true);
+                            return true;
                         }
                     }
                     else{
                         if (isColumnClear(destination, colDiff)){
                             putItemToDestination(destination,true);
+                            return true;
                         }
                     }
                 }
@@ -52,7 +54,7 @@ public class Chariot extends Item{
                 return false;
             }
         }
-        return true;
+        return false;
     }
 
 
@@ -61,10 +63,10 @@ public class Chariot extends Item{
         char row = destination.substring(0,1).toLowerCase().charAt(0);
         int col = Integer.parseInt(destination.substring(1,2));
         if(row < 'a' || row > 'j' || col < 1 || col > 9){
-            throw new OutOfBoardException("Chariot. Hatali Hareket.");
+            throw new OutOfBoardException("Hatali Hareket.");
         }
         if(! ( (rowDiff == 0 && colDiff != 0) || (rowDiff != 0 && colDiff == 0) )  ) {
-            throw new PieceMovementException("Chariot. Hatali Hareket.");
+            throw new PieceMovementException("Hatali Hareket.");
         }
         return true;
     }

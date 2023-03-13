@@ -8,20 +8,19 @@ public class Elephant extends Item{
         char row = destination.substring(0,1).toLowerCase().charAt(0);
         int col = Integer.parseInt(destination.substring(1,2));
         if(row < 'a' || row > 'j' || col < 1 || col > 9){
-            throw new OutOfBoardException("Elephant. Hatali Hareket.");
+            throw new OutOfBoardException("Hatali Hareket.");
         }
         if(Math.abs(rowDiff) != Math.abs(colDiff) || ( rowDiff == 0 || colDiff == 0) ){
-            throw new PieceMovementException("Elephant. Hatali Hareket.");
+            throw new PieceMovementException("Hatali Hareket.");
         }
         if(Math.abs(rowDiff) != 2 || Math.abs(colDiff) != 2){
-            throw new PieceMovementException("Elephant. Hatali Hareket.");
+            throw new PieceMovementException("Hatali Hareket.");
         }
         return true;
     }
 
     @Override
     public void move(String destination) {
-        System.out.println("fil");
         if(!isItAfterRiver(destination)){
             int[] distance = calculateDistance(getPosition(), destination);
             if(distance != null){
@@ -51,6 +50,7 @@ public class Elephant extends Item{
                     if(isItSuitableMove(destination, rowDiff, colDiff)){
                         if ( isCrossClear(destination, rowDiff, colDiff) ){
                             putItemToDestination(destination,true);
+                            return true;
                         }
                     }
                 } catch (OutOfBoardException | FlyingRuleException | PieceMovementException | CheckMateException e) {
@@ -58,7 +58,7 @@ public class Elephant extends Item{
                 }
             }
         }
-        return true;
+        return false;
     }
 
 

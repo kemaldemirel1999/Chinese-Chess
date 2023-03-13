@@ -9,10 +9,10 @@ public class Cannon extends Item{
         char row = destination.substring(0,1).toLowerCase().charAt(0);
         int col = Integer.parseInt(destination.substring(1,2));
         if(row < 'a' || row > 'j' || col < 1 || col > 9){
-            throw new OutOfBoardException("Cannon. Hatali Hareket.");
+            throw new OutOfBoardException("Hatali Hareket.");
         }
         if(!((rowDiff == 0 && colDiff != 0) || (rowDiff != 0 && colDiff == 0))){
-            throw new PieceMovementException("Cannon. Hatali hareket.");
+            throw new PieceMovementException("Hatali hareket.");
         }
         return true;
     }
@@ -59,17 +59,21 @@ public class Cannon extends Item{
                     if(isDestinationEmpty(destination)){
                         if(rowDiff != 0 && isRowClear(destination, rowDiff)){
                             putItemToDestination(destination,true);
+                            return true;
                         }
                         else if(colDiff != 0 && isColumnClear(destination, colDiff) ){
                             putItemToDestination(destination,true);
+                            return true;
                         }
                     }
                     else{
                         if(rowDiff != 0 && isRowCannonRuleSatisfy(destination, rowDiff)){
                             putItemToDestination(destination,true);
+                            return true;
                         }
                         else if(colDiff != 0 && isColumnCannonRuleSatisfy(destination, rowDiff)){
                             putItemToDestination(destination,true);
+                            return true;
                         }
                     }
                 }
@@ -77,7 +81,7 @@ public class Cannon extends Item{
                 return false;
             }
         }
-        return true;
+        return false;
     }
 
 

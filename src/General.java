@@ -9,13 +9,13 @@ public class General extends Item{
         char row = destination.substring(0,1).toLowerCase().charAt(0);
         int col = Integer.parseInt(destination.substring(1,2));
         if(row < 'a' || row > 'j' || col < 1 || col > 9){
-            throw new OutOfBoardException("General. Hatali Hareket.");
+            throw new OutOfBoardException("Hatali Hareket.");
         }
         if(!isItemInOwnPalace(destination)){
-            throw new PieceMovementException("General. Hatali Haraket.");
+            throw new PieceMovementException("Hatali Haraket.");
         }
         if(!((rowDiff == 0 && Math.abs(colDiff) == 1 ) || (Math.abs(rowDiff) == 1 && colDiff == 0) ) ){
-            throw new PieceMovementException("General. Hatali Haraket.");
+            throw new PieceMovementException("Hatali Haraket.");
         }
         return true;
     }
@@ -45,12 +45,13 @@ public class General extends Item{
             try {
                 if(isItSuitableMove(destination, rowDiff, colDiff)){
                     putItemToDestination(destination,true);
+                    return true;
                 }
             } catch (OutOfBoardException | FlyingRuleException | PieceMovementException | CheckMateException e) {
                 return false;
             }
         }
-        return true;
+        return false;
     }
 
 }
